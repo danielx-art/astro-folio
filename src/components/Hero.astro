@@ -1,0 +1,69 @@
+---
+export interface Props {}
+---
+
+<div class="hero-container">
+  <div class="inner-container">
+    <div class="myname">Daniel</div>
+    <div class="tags">
+      <div>#web</div>
+      <div>#código</div>
+      <div>#educação</div>
+      <div>#arte</div>
+      <div>#design</div>
+    </div>
+  </div>
+  <canvas id="hero-canvas"> </canvas>
+</div>
+
+<script>
+  import rough from "roughjs";
+  const herocanvas = document.getElementById(
+    "hero-canvas"
+  ) as HTMLCanvasElement;
+  const rc = rough.canvas(herocanvas);
+
+  //line and rectangle
+  rc.rectangle(0, 0, 100, 150);
+</script>
+
+<style>
+  #hero-canvas {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  .hero-container {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+  .inner-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    font-family: Fira Code, monospace;
+    padding: 3rem;
+    gap: 1rem;
+    transform: translateY(15%);
+  }
+  .myname {
+    font-size: 5rem;
+    color: white;
+  }
+  .tags {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.7rem;
+    font-size: 1rem;
+    font-style: italic;
+    color: gray;
+  }
+</style>
