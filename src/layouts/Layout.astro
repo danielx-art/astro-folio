@@ -34,13 +34,15 @@ const { title, lang } = Astro.props;
       html {
         font-family: system-ui, sans-serif;
         background-color: var(--backgroundblack);
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
       body {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
         height: 300vh;
-        overflow-y: scroll;
         scrollbar-width: none;
         -ms-overflow-style: none;
       }

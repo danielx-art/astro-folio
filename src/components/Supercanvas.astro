@@ -1,0 +1,45 @@
+---
+export interface Props {}
+---
+
+<canvas id="hero-canvas"> </canvas>
+
+<script>
+  import rough from "roughjs";
+  const herocanvas = document.getElementById(
+    "hero-canvas"
+  ) as HTMLCanvasElement;
+
+  window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("load", resizeCanvas);
+
+  function resizeCanvas() {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    herocanvas.width = w;
+    herocanvas.height = h;
+    const rc = rough.canvas(herocanvas);
+
+    //setup initial state
+
+    //draw function
+
+    function animate() {
+      requestAnimationFrame(animate);
+      herocanvas
+        .getContext("2d")
+        ?.clearRect(0, 0, herocanvas.width, herocanvas.height);
+    }
+    //animate();
+  }
+</script>
+
+<style>
+  #hero-canvas {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+</style>

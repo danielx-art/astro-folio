@@ -1,12 +1,18 @@
 ---
-import Hero from "../components/Hero.astro";
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Projects from "../components/Projects.astro";
+import More from "../components/More.astro";
+import Supercanvas from "../components/Supercanvas.astro";
 const lang = "pt-br";
 ---
 
 <Layout title="Daniel Folio" lang={lang}>
+  <Supercanvas />
   <div class="super-container">
     <Hero />
+    <Projects />
+    <More />
   </div>
 </Layout>
 

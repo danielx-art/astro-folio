@@ -13,29 +13,9 @@ export interface Props {}
       <div>#design</div>
     </div>
   </div>
-  <canvas id="hero-canvas"> </canvas>
 </div>
 
-<script>
-  import rough from "roughjs";
-  const herocanvas = document.getElementById(
-    "hero-canvas"
-  ) as HTMLCanvasElement;
-  const rc = rough.canvas(herocanvas);
-
-  //line and rectangle
-  rc.rectangle(0, 0, 100, 150);
-</script>
-
 <style>
-  #hero-canvas {
-    width: 100%;
-    height: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
   .hero-container {
     position: relative;
     display: flex;
