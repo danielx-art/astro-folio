@@ -6,6 +6,13 @@ export interface Props {}
 
 <script>
   import rough from "roughjs";
+  import { parallelepiped } from "./animation-resources/shapes";
+  import { vec, vector } from "./animation-resources/vetores";
+  import createParticle from "./animation-resources/particle";
+  import magneticDipole from "./animation-resources/magneticDipole";
+  import type { Tparticle } from "./animation-resources/types";
+  import trace from "./animation-resources/tracers";
+
   const herocanvas = document.getElementById(
     "hero-canvas"
   ) as HTMLCanvasElement;
@@ -16,21 +23,154 @@ export interface Props {}
   function resizeCanvas() {
     var w = window.innerWidth;
     var h = window.innerHeight;
+    var d = Math.min(w, h);
     herocanvas.width = w;
     herocanvas.height = h;
     const rc = rough.canvas(herocanvas);
 
-    //setup initial state
+    //-----SETUP INITIAL STATE
+    let boundary = parallelepiped(vec(w / 2, h / 2, 0), w, h, d);
+    let num = 3;
+    let numTracers = 5;
+    let tracersLen = 150;
+    let tracerDetail = 5;
+    let particles = [] as Tparticle[];
+    let particleSize = { x: 0.05 * w, y: 0.08 * w };
 
-    //draw function
+    let safeRadius = 2;
+
+    for (let n = 0; n < num; n++) {
+      let randomPosition = vec(
+        Math.random() * w,
+        Math.random() * h,
+        Math.random() * d
+      );
+
+      let newParticle = createParticle({
+        index: n,
+        position: randomPosition,
+        direction: vec().random2D(1),
+
+        behaviours: [magneticDipole],
+      });
+
+      particles.push(newParticle);
+    }
+
+    let update = () => {
+      for (let i = 0; i < num; i++) {
+        let thisParticle = particles[i];
+        let tooClose = particles.filter(
+          (particle) =>
+            vec()
+              .copy(particle.position)
+              .distanceToSquared(thisParticle.position) < safeRadius
+        );
+        let agents = particles.filter((x: any) => !tooClose.includes(x));
+        particles[i].applyForces(agents);
+      }
+    };
+
+    // let repopulateTree = () => {
+    //   self.collisionDetection = octaTree(self.boundary, 8);
+    //   for (let i = 0; i < self.num; i++) {
+    //     self.collisionDetection.insert(self.particles[i]);
+    //   }
+    // };
+
+    //move
+    let move = () => {
+      for (let i = 0; i < num; i++) {
+        particles[i].move();
+        //self.wrap(self.particles[i], self.boundary);
+      }
+      //repopulateTree();
+    };
+
+    let show = () => {
+      particles.forEach((particle) => {
+        let pos = particle.position;
+        let mainAxis = vec()
+          .copy(particle.direction)
+          .setMag(particleSize.y / 2);
+        let crossAxis = vec()
+          .copy(particle.direction)
+          .cross(vec(0, 0, 1))
+          .setMag(particleSize.x / 2);
+        let v1 = vec().copy(pos).sub(mainAxis).sub(crossAxis);
+        let v2 = vec().copy(pos).sub(mainAxis).add(crossAxis);
+        let v3 = vec().copy(pos).add(mainAxis).add(crossAxis);
+        let v4 = vec().copy(pos).add(mainAxis).sub(crossAxis);
+        rc.polygon(
+          [
+            [v1.x, v1.y],
+            [v2.x, v2.y],
+            [v3.x, v3.y],
+            [v4.x, v4.y],
+          ],
+          {
+            stroke: "none",
+            fill: "red",
+          }
+        );
+      });
+    };
+
+    //-----DRAW FUNCTION
+
+    let t = 0;
+    let fieldTracers = [] as vector[][];
+    for (let n = 0; n < numTracers; n++) {
+      fieldTracers.push(
+        trace(particles, boundary, "magnet", tracersLen, tracerDetail, [])
+      );
+    }
 
     function animate() {
       requestAnimationFrame(animate);
       herocanvas
         .getContext("2d")
         ?.clearRect(0, 0, herocanvas.width, herocanvas.height);
+
+      update();
+      move();
+      show();
+      for (let n = 0; n < numTracers; n++) {
+        if (Math.random() < 0.99) {
+          fieldTracers[n].shift();
+
+          fieldTracers[n] = trace(
+            particles,
+            boundary,
+            "magnet",
+            tracersLen,
+            tracerDetail,
+            [...fieldTracers[n]]
+          );
+        } else {
+          fieldTracers[n].splice(0, tracersLen);
+          fieldTracers[n] = trace(
+            particles,
+            boundary,
+            "magnet",
+            tracersLen,
+            tracerDetail,
+            []
+          );
+        }
+      }
+
+      fieldTracers.forEach((fieldTrace) => {
+        rc.linearPath(
+          fieldTrace.map((each) => [each.x, each.y]),
+          { stroke: "red", strokeWidth: 3 }
+        );
+      });
+
+      //rc.rectangle(0, 0, 100, 100, { fill: "red" });
+      t++;
     }
-    //animate();
+    animate();
   }
 </script>
 
