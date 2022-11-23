@@ -3,13 +3,13 @@ import type { Tbehaviour, Tparticle } from "./types";
 import { vec } from "./vetores";
 
 export default function magneticDipole(): Tbehaviour {
-  let m = vec().random2D(1);
+  let m = vec().random2D(10);
 
   let field = (pointInSpace: vector, from: Tparticle) => {
     let vecr = vec().copy(pointInSpace).sub(vec().copy(from.position));
     let versorr = vec().copy(vecr).setMag(1);
     let r = vecr.mag();
-    if (r > 0) {
+    if (r > 5) {
       /*note
         this is redundant since particle will only act on particles outside a "tooClose" or
         safeRadius as worked on the particleSystem and collisionDetection themselves

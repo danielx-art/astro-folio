@@ -2,48 +2,121 @@
 export interface Props {}
 ---
 
-<canvas id="hero-canvas"> </canvas>
+<div id="background-vfx">
+  <div id="magnet1"></div>
+  <div id="magnet2"></div>
+  <canvas id="hero-canvas"> </canvas>
+</div>
 
 <script>
   import rough from "roughjs";
-  import { parallelepiped } from "./animation-resources/shapes";
-  import { vec, vector } from "./animation-resources/vetores";
-  import createParticle from "./animation-resources/particle";
-  import magneticDipole from "./animation-resources/magneticDipole";
-  import type { Tparticle } from "./animation-resources/types";
-  import trace from "./animation-resources/tracers";
+  import { vec, vector } from "../../public/animation-resources/vetores";
+  import createParticle from "../../public/animation-resources/particle";
+  import magneticDipole from "../../public/animation-resources/magneticDipole";
+  import type { Tparticle } from "../../public/animation-resources/types";
+  import {
+    traceGrid,
+    TtraceGrid,
+  } from "../../public/animation-resources/tracers";
+  import { createGrid } from "../../public/animation-resources/gridCells";
 
+  /*----------------------------------------------------------
+  --------------------0-GET DOM ELEMENTS----------------------
+  ----------------------------------------------------------*/
+  const textContent = document.querySelector("#background-vfx") as HTMLElement;
+  const heroCanvas = document.querySelector("#hero-canvas") as HTMLElement;
+  const magnet1 = document.querySelector("#magnet1") as HTMLDivElement;
+  const magnet2 = document.querySelector("#magnet2") as HTMLDivElement;
+  const magnets = [
+    {
+      dom: magnet1,
+      isDragging: false,
+    },
+    {
+      dom: magnet2,
+      isDragging: false,
+    },
+  ];
   const herocanvas = document.getElementById(
     "hero-canvas"
   ) as HTMLCanvasElement;
 
-  window.addEventListener("resize", resizeCanvas);
-  window.addEventListener("load", resizeCanvas);
+  /*----------------------------------------------------------
+  --------------------1-GLOBAL VARIABLES----------------------
+  ----------------------------------------------------------*/
+  const textColor = getComputedStyle(textContent).color;
+  const heroColor = getComputedStyle(heroCanvas).color;
+  const magnetColor = getComputedStyle(magnets[0].dom).color;
+  const sentence = " #web #código #educação #arte #design";
+  var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
+  let gridFontSize;
+  const num = 2;
+  let particles = [] as Tparticle[];
+  let magnetsSize = {} as { x: number; y: number };
+  let w = window.innerWidth;
+  let h = window.innerHeight;
+  const safeRadius = 2;
+  let rc = rough.canvas(herocanvas);
+  const pixels = [] as string[];
+  let gridTracers: TtraceGrid;
 
-  function resizeCanvas() {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-    var d = Math.min(w, h);
+  let mouse = { x: 0, y: 0 };
+  let start = { x: 0, y: 0 };
+
+  let mouseMove = function (e: MouseEvent) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+
+    magnets.forEach((magnet, index) => {
+      if (magnet.isDragging) {
+        particles[index].position.x = e.x;
+        particles[index].position.y = e.y;
+      }
+    });
+  };
+
+  let mouseDown = function (e: Event, id: number) {
+    e.preventDefault;
+    magnets[id].isDragging = true;
+    start.x = mouse.x;
+    start.y = mouse.y;
+  };
+
+  let mouseUp = function (e: Event, id: number) {
+    if (!magnets[id].isDragging) {
+      return;
+    }
+    e.preventDefault();
+    magnets[id].isDragging = false;
+  };
+
+  window.onmousemove = mouseMove;
+  magnets[0].dom.onmousedown = (e) => mouseDown(e, 0);
+  magnets[1].dom.onmousedown = (e) => mouseDown(e, 1);
+  magnets[0].dom.onmouseup = (e) => mouseUp(e, 0);
+  magnets[1].dom.onmouseup = (e) => mouseUp(e, 1);
+
+  /*----------------------------------------------------------
+  --------------------2-SETUP ON RESIZE----------------------
+  ----------------------------------------------------------*/
+  function setupCanvas() {
+    w = window.innerWidth;
+    h = window.innerHeight;
     herocanvas.width = w;
     herocanvas.height = h;
-    const rc = rough.canvas(herocanvas);
+    gridFontSize = parseInt(getComputedStyle(textContent).fontSize, 10);
+    magnetsSize = {
+      x: Math.max(0.05 * w, 20),
+      y: Math.max(0.08 * w, 80),
+    };
 
-    //-----SETUP INITIAL STATE
-    let boundary = parallelepiped(vec(w / 2, h / 2, 0), w, h, d);
-    let num = 3;
-    let numTracers = 5;
-    let tracersLen = 150;
-    let tracerDetail = 5;
-    let particles = [] as Tparticle[];
-    let particleSize = { x: 0.05 * w, y: 0.08 * w };
-
-    let safeRadius = 2;
-
+    //1.Initialize magnets
+    particles = [];
     for (let n = 0; n < num; n++) {
       let randomPosition = vec(
-        Math.random() * w,
-        Math.random() * h,
-        Math.random() * d
+        0.2 * w + 0.6 * Math.random() * w,
+        0.2 * h + 0.6 * Math.random() * h,
+        0
       );
 
       let newParticle = createParticle({
@@ -53,133 +126,138 @@ export interface Props {}
 
         behaviours: [magneticDipole],
       });
-
       particles.push(newParticle);
     }
 
-    let update = () => {
-      for (let i = 0; i < num; i++) {
-        let thisParticle = particles[i];
-        let tooClose = particles.filter(
-          (particle) =>
-            vec()
-              .copy(particle.position)
-              .distanceToSquared(thisParticle.position) < safeRadius
-        );
-        let agents = particles.filter((x: any) => !tooClose.includes(x));
-        particles[i].applyForces(agents);
-      }
-    };
+    //2. Initialize grid
+    let grid = createGrid(
+      [herocanvas.width, herocanvas.height],
+      [gridFontSize, gridFontSize]
+    );
+    let numTracers = 6;
+    let tracersLen = 10;
+    let tracerLife = 5;
+    let tracerLifeVariation = 0.1;
+    //2.b Initalize tracers
+    gridTracers = traceGrid(
+      numTracers,
+      tracersLen,
+      tracerLife,
+      tracerLifeVariation,
+      grid,
+      ctx,
+      particles,
+      "magnet"
+    );
+    //3. Fill the background string
 
-    // let repopulateTree = () => {
-    //   self.collisionDetection = octaTree(self.boundary, 8);
-    //   for (let i = 0; i < self.num; i++) {
-    //     self.collisionDetection.insert(self.particles[i]);
-    //   }
-    // };
+    for (let n = 0; n < grid.cells.length; n++) {
+      pixels.push(`${sentence.charAt(n % sentence.length)}`);
+    }
+  }
 
-    //move
-    let move = () => {
-      for (let i = 0; i < num; i++) {
-        particles[i].move();
-        //self.wrap(self.particles[i], self.boundary);
-      }
-      //repopulateTree();
-    };
-
-    let show = () => {
-      particles.forEach((particle) => {
-        let pos = particle.position;
-        let mainAxis = vec()
-          .copy(particle.direction)
-          .setMag(particleSize.y / 2);
-        let crossAxis = vec()
-          .copy(particle.direction)
-          .cross(vec(0, 0, 1))
-          .setMag(particleSize.x / 2);
-        let v1 = vec().copy(pos).sub(mainAxis).sub(crossAxis);
-        let v2 = vec().copy(pos).sub(mainAxis).add(crossAxis);
-        let v3 = vec().copy(pos).add(mainAxis).add(crossAxis);
-        let v4 = vec().copy(pos).add(mainAxis).sub(crossAxis);
-        rc.polygon(
-          [
-            [v1.x, v1.y],
-            [v2.x, v2.y],
-            [v3.x, v3.y],
-            [v4.x, v4.y],
-          ],
-          {
-            stroke: "none",
-            fill: "red",
-          }
-        );
-      });
-    };
-
-    //-----DRAW FUNCTION
-
-    let t = 0;
-    let fieldTracers = [] as vector[][];
-    for (let n = 0; n < numTracers; n++) {
-      fieldTracers.push(
-        trace(particles, boundary, "magnet", tracersLen, tracerDetail, [])
+  /*----------------------------------------------------------
+  --------------------3-FUNCTIONS FOR LOOP--------------------
+  ----------------------------------------------------------*/
+  let update = () => {
+    for (let i = 0; i < num; i++) {
+      let thisParticle = particles[i];
+      let tooClose = particles.filter(
+        (particle) =>
+          vec()
+            .copy(particle.position)
+            .distanceToSquared(thisParticle.position) < safeRadius
       );
+      let agents = particles.filter((x: any) => !tooClose.includes(x));
+      particles[i].applyForces(agents);
+    }
+  };
+
+  let move = () => {
+    for (let i = 0; i < num; i++) {
+      particles[i].move();
+    }
+    magnets.forEach((magnet, index) => {
+      magnet.dom.style.width = `${magnetsSize.y}px`;
+      magnet.dom.style.height = `${magnetsSize.x}px`;
+      magnet.dom.style.top = `${particles[index].position.y}px`;
+      magnet.dom.style.left = `${particles[index].position.x}px`;
+      magnet.dom.style.transformOrigin = "top left";
+      magnet.dom.style.rotate = `${particles[index].direction.heading()}rad`;
+    });
+  };
+
+  let show = () => {
+    particles.forEach((particle) => {
+      particle.show(rc, magnetsSize, magnetColor);
+    });
+  };
+
+  /*----------------------------------------------------------
+  ---------------------4-DRAW LOOP----------------------------
+  ----------------------------------------------------------*/
+  let t = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    if (
+      herocanvas.width != window.innerWidth ||
+      herocanvas.height != window.innerHeight
+    ) {
+      setupCanvas();
     }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      herocanvas
-        .getContext("2d")
-        ?.clearRect(0, 0, herocanvas.width, herocanvas.height);
-
+    if (particles.length == num && gridTracers.traces.length > 0) {
+      ctx.clearRect(0, 0, herocanvas.width, herocanvas.height);
       update();
       move();
-      show();
-      for (let n = 0; n < numTracers; n++) {
-        if (Math.random() < 0.99) {
-          fieldTracers[n].shift();
-
-          fieldTracers[n] = trace(
-            particles,
-            boundary,
-            "magnet",
-            tracersLen,
-            tracerDetail,
-            [...fieldTracers[n]]
-          );
-        } else {
-          fieldTracers[n].splice(0, tracersLen);
-          fieldTracers[n] = trace(
-            particles,
-            boundary,
-            "magnet",
-            tracersLen,
-            tracerDetail,
-            []
-          );
-        }
+      //grid.show(rc); //test & fun
+      if (t % 11 == 0) {
+        gridTracers.update();
+        t = 0;
       }
-
-      fieldTracers.forEach((fieldTrace) => {
-        rc.linearPath(
-          fieldTrace.map((each) => [each.x, each.y]),
-          { stroke: "red", strokeWidth: 3 }
-        );
-      });
-
-      //rc.rectangle(0, 0, 100, 100, { fill: "red" });
+      gridTracers.showText(pixels, textColor, heroColor);
+      show();
       t++;
     }
-    animate();
   }
+  animate();
 </script>
 
 <style>
+  #background-vfx {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    font-size: max(2.2vw, 3vh);
+    color: var(--pallete4c);
+  }
+
   #hero-canvas {
     width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
     z-index: -1;
+    background-color: var(--pallete4a);
+    color: var(--pallete4cA);
+  }
+
+  #magnet1,
+  #magnet2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid var(--pallete4b);
+    transform: translate(-50%, -50%);
+    color: var(--pallete4b);
   }
 </style>

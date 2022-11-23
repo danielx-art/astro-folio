@@ -67,11 +67,16 @@ const vec = function (x = 0, y = 0, z = 0): vector {
     heading: function () {
       return Math.atan2(self.y, self.x);
     },
-    rotate: function (a: number) {
-      let newHeading = self.heading() + a;
-      const mag = self.mag();
-      self.x = Math.cos(newHeading) * mag;
-      self.y = Math.sin(newHeading) * mag;
+    rotate: function (a: number, o: vector = vec(0, 0, 0)) {
+      //let newHeading = self.heading() + a;
+      let newx = (self.x - o.x) * Math.cos(a) - (self.y - o.y) * Math.sin(a);
+      let newy = (self.x - o.x) * Math.sin(a) + (self.y - o.y) * Math.cos(a);
+      self.x = newx;
+      self.y = newy;
+      // const mag = self.mag();
+
+      // self.x = Math.cos(newHeading) * mag;
+      // self.y = Math.sin(newHeading) * mag;
       return this;
     },
     angleBetween: function angleBetween(v: vector) {
@@ -124,7 +129,7 @@ export type vector = {
   setMag: (number: number) => vector;
   limit: (number: number) => vector;
   heading: () => number;
-  rotate: (number: number) => vector;
+  rotate: (number: number, o?: vector) => vector;
   angleBetween: (other: vector) => number;
   random2D: (number: number) => vector;
   distanceToSquared: (other: vector) => number;

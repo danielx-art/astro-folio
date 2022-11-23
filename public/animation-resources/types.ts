@@ -1,3 +1,4 @@
+import type { RoughCanvas } from "roughjs/bin/canvas";
 import type { Iparallelepiped, Ishape } from "./shapes";
 import type { vector } from "./vetores";
 
@@ -83,6 +84,11 @@ export type Tparticle = {
   x: number;
   y: number;
   z: number;
+  show: (
+    canvasContext: RoughCanvas,
+    particleSize: { x: number; y: number },
+    magnetColor: string
+  ) => void;
 };
 
 export type TparticleSystem = {

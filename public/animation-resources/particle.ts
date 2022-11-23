@@ -1,5 +1,6 @@
 import { vec } from "./vetores";
 import type { Tbehaviour, Tparticle } from "./types";
+import type { RoughCanvas } from "roughjs/bin/canvas";
 
 /* --------------------------------------------------------------
 -----------------------------------------------------------------
@@ -18,10 +19,10 @@ export default function createParticle({
   initialAngularVelocity = vec(),
 
   maxForce = 0.3,
-  maxTorque = 1,
-  maxSpeed = 0.3,
-  maxAngVel = 1,
-  translationDamping = 0,
+  maxTorque = 0.5,
+  maxSpeed = 2,
+  maxAngVel = 0.1,
+  translationDamping = 1,
   rotationDamping = 0.9,
 
   behaviours = [] as (() => Tbehaviour)[],
@@ -60,10 +61,15 @@ export default function createParticle({
       });
     },
     move: function () {
+      //console.log("acl:", acl); //debugg
       acl.limit(maxForce / inertialMass);
+      //console.log("acl:", acl); //debugg
       vel.add(acl);
+      //console.log("vel:", vel); //debugg
       vel.mult(translationDamping);
+      //console.log("vel:", vel); //debugg
       vel.limit(maxSpeed);
+      //console.log("vel:", vel); //debugg
 
       position.add(vel);
       acl.mult(0);
@@ -92,6 +98,57 @@ export default function createParticle({
 
     get z() {
       return this.position.z;
+    },
+    show: function (
+      canvasContext: RoughCanvas,
+      particleSize: { x: number; y: number },
+      magnetColor: string
+    ) {
+      let pos = this.position;
+      let mainAxis = vec(this.direction.x, this.direction.y, 0).setMag(
+        particleSize.y / 2
+      );
+      let crossAxis = vec(this.direction.x, this.direction.y, 0)
+        .cross(vec(0, 0, 1))
+        .setMag(particleSize.x / 2);
+      let v1 = vec().copy(pos).sub(mainAxis).sub(crossAxis);
+      let v2 = vec().copy(pos).sub(mainAxis).add(crossAxis);
+      let v3 = vec().copy(pos).add(mainAxis).add(crossAxis);
+      let v4 = vec().copy(pos).add(mainAxis).sub(crossAxis);
+      // let particleHeading = this.direction.heading();
+      // let v1 = vec()
+      //   .copy(pos)
+      //   .add(vec(-particleSize.x / 2, -particleSize.y / 2))
+      //   .rotate(particleHeading, this.position)
+      //   .add(this.position);
+      // let v2 = vec()
+      //   .copy(pos)
+      //   .add(vec(-particleSize.x / 2, +particleSize.y / 2))
+      //   .rotate(particleHeading, this.position)
+      //   .add(this.position);
+      // let v3 = vec()
+      //   .copy(pos)
+      //   .add(vec(+particleSize.x / 2, +particleSize.y / 2))
+      //   .rotate(particleHeading, this.position)
+      //   .add(this.position);
+      // let v4 = vec()
+      //   .copy(pos)
+      //   .add(vec(+particleSize.x / 2, -particleSize.y / 2))
+      //   .rotate(particleHeading, this.position)
+      //   .add(this.position);
+
+      canvasContext.polygon(
+        [
+          [v1.x, v1.y],
+          [v2.x, v2.y],
+          [v3.x, v3.y],
+          [v4.x, v4.y],
+        ],
+        {
+          stroke: "none",
+          fill: magnetColor,
+        }
+      );
     },
   };
 
