@@ -26,6 +26,9 @@ const { title, lang } = Astro.props;
     <slot />
     <script></script>
     <style is:global>
+      * {
+        overscroll-behavior: contain;
+      }
       :root {
         --pallete1a: #283d3b;
         --pallete1aA: #283d3b10;
@@ -59,7 +62,6 @@ const { title, lang } = Astro.props;
         padding: 0;
         width: 100%;
         box-sizing: border-box;
-        overscroll-behavior: contain;
       }
       body {
         position: fixed;
