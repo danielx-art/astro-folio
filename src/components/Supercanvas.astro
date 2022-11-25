@@ -15,6 +15,8 @@ export interface Props {}
   import magneticDipole from "../../public/animation-resources/magneticDipole";
   import type { Tparticle } from "../../public/animation-resources/types";
   import {
+    easeWalkTruArray,
+    trace,
     traceGrid,
     TtraceGrid,
   } from "../../public/animation-resources/tracers";
@@ -27,16 +29,6 @@ export interface Props {}
   const heroCanvas = document.querySelector("#hero-canvas") as HTMLElement;
   const magnet1 = document.querySelector("#magnet1") as HTMLDivElement;
   const magnet2 = document.querySelector("#magnet2") as HTMLDivElement;
-  const magnets = [
-    {
-      dom: magnet1,
-      isDragging: false,
-    },
-    {
-      dom: magnet2,
-      isDragging: false,
-    },
-  ];
   const herocanvas = document.getElementById(
     "hero-canvas"
   ) as HTMLCanvasElement;
@@ -44,9 +36,11 @@ export interface Props {}
   /*----------------------------------------------------------
   --------------------1-GLOBAL VARIABLES----------------------
   ----------------------------------------------------------*/
+  const magnets = [magnet1, magnet2];
+  let isDragging = -1;
   const textColor = getComputedStyle(textContent).color;
   const heroColor = getComputedStyle(heroCanvas).color;
-  const magnetColor = getComputedStyle(magnets[0].dom).color;
+  const magnetColor = getComputedStyle(magnets[0]).color;
   const sentence = " #web #código #educação #arte #design";
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize;
@@ -67,34 +61,54 @@ export interface Props {}
     mouse.x = e.x;
     mouse.y = e.y;
 
-    magnets.forEach((magnet, index) => {
-      if (magnet.isDragging) {
-        particles[index].position.x = e.x;
-        particles[index].position.y = e.y;
-      }
-    });
-  };
-
-  let mouseDown = function (e: Event, id: number) {
-    e.preventDefault;
-    magnets[id].isDragging = true;
-    start.x = mouse.x;
-    start.y = mouse.y;
-  };
-
-  let mouseUp = function (e: Event, id: number) {
-    if (!magnets[id].isDragging) {
-      return;
+    if (isDragging != -1) {
+      particles[isDragging].position.x = e.x;
+      particles[isDragging].position.y = e.y;
     }
+  };
+
+  let mouseDown = function (e: MouseEvent, id: number) {
+    e.preventDefault;
+    isDragging = id;
+    start.x = e.x;
+    start.y = e.y;
+  };
+
+  let mouseUp = function (e: MouseEvent | TouchEvent, id: number) {
     e.preventDefault();
-    magnets[id].isDragging = false;
+    isDragging = -1;
   };
 
   window.onmousemove = mouseMove;
-  magnets[0].dom.onmousedown = (e) => mouseDown(e, 0);
-  magnets[1].dom.onmousedown = (e) => mouseDown(e, 1);
-  magnets[0].dom.onmouseup = (e) => mouseUp(e, 0);
-  magnets[1].dom.onmouseup = (e) => mouseUp(e, 1);
+  magnets[0].onmousedown = (e) => mouseDown(e, 0);
+  magnets[1].onmousedown = (e) => mouseDown(e, 1);
+  magnets[0].onmouseup = (e) => mouseUp(e, 0);
+  magnets[1].onmouseup = (e) => mouseUp(e, 1);
+
+  let touchMove = function (e: TouchEvent, id: number) {
+    mouse.x = e.changedTouches[0].clientX;
+    mouse.y = e.changedTouches[0].clientY;
+
+    if (isDragging != -1) {
+      particles[isDragging].position.x = e.changedTouches[0].clientX;
+      particles[isDragging].position.y = e.changedTouches[0].clientY;
+    }
+  };
+
+  let touchStart = function (e: TouchEvent, id: number) {
+    e.preventDefault;
+    isDragging = id;
+    start.x = e.changedTouches[0].clientX;
+    start.y = e.changedTouches[0].clientY;
+  };
+
+  window.ontouchmove = (e) => touchMove(e, 0);
+  magnets[0].ontouchstart = (e) => touchStart(e, 0);
+  magnets[1].ontouchstart = (e) => touchStart(e, 1);
+  magnets[0].ontouchend = (e) => mouseUp(e, 0);
+  magnets[1].ontouchend = (e) => mouseUp(e, 1);
+  magnets[0].ontouchcancel = (e) => mouseUp(e, 0);
+  magnets[1].ontouchcancel = (e) => mouseUp(e, 1);
 
   /*----------------------------------------------------------
   --------------------2-SETUP ON RESIZE----------------------
@@ -106,8 +120,8 @@ export interface Props {}
     herocanvas.height = h;
     gridFontSize = parseInt(getComputedStyle(textContent).fontSize, 10);
     magnetsSize = {
-      x: Math.max(0.05 * w, 20),
-      y: Math.max(0.08 * w, 80),
+      x: gridFontSize * 3,
+      y: gridFontSize * 5,
     };
 
     //1.Initialize magnets
@@ -178,12 +192,12 @@ export interface Props {}
       particles[i].move();
     }
     magnets.forEach((magnet, index) => {
-      magnet.dom.style.width = `${magnetsSize.y}px`;
-      magnet.dom.style.height = `${magnetsSize.x}px`;
-      magnet.dom.style.top = `${particles[index].position.y}px`;
-      magnet.dom.style.left = `${particles[index].position.x}px`;
-      magnet.dom.style.transformOrigin = "top left";
-      magnet.dom.style.rotate = `${particles[index].direction.heading()}rad`;
+      magnet.style.width = `${magnetsSize.y}px`;
+      magnet.style.height = `${magnetsSize.x}px`;
+      magnet.style.top = `${particles[index].position.y}px`;
+      magnet.style.left = `${particles[index].position.x}px`;
+      magnet.style.transformOrigin = "top left";
+      magnet.style.rotate = `${particles[index].direction.heading()}rad`;
     });
   };
 
@@ -197,6 +211,7 @@ export interface Props {}
   ---------------------4-DRAW LOOP----------------------------
   ----------------------------------------------------------*/
   let t = 0;
+  let tracesOnDrag = [] as vector[][];
 
   function animate() {
     requestAnimationFrame(animate);
@@ -208,19 +223,47 @@ export interface Props {}
       setupCanvas();
     }
 
-    if (particles.length == num && gridTracers.traces.length > 0) {
-      ctx.clearRect(0, 0, herocanvas.width, herocanvas.height);
-      update();
-      move();
-      //grid.show(rc); //test & fun
-      if (t % 11 == 0) {
-        gridTracers.update();
-        t = 0;
-      }
-      gridTracers.showText(pixels, textColor, heroColor);
-      show();
-      t++;
+    ctx.clearRect(0, 0, herocanvas.width, herocanvas.height);
+    update();
+    move();
+    //grid.show(rc); //test & fun
+    if (t % 11 == 0) {
+      gridTracers.update();
+      t = 0;
     }
+    gridTracers.showText(pixels, textColor, heroColor);
+    show();
+
+    //Hover effect
+    if (isDragging != -1) {
+      if (tracesOnDrag.length < 1) {
+        let vc = vec()
+          .random2D(magnetsSize.y)
+          .add(particles[isDragging].position);
+        //rc.circle(vc.x, vc.y, 100, { fill: "blue" }); //test
+        let traceArr = trace(
+          particles[isDragging].physics.magnet.field,
+          vc,
+          (a, b) => vec().copy(a).add(b.setMag(5)),
+          100,
+          particles[isDragging]
+        );
+        tracesOnDrag.push(traceArr);
+      } else {
+        tracesOnDrag.forEach((traceArr) => {
+          let pieceToShow = easeWalkTruArray(t, 10, 0.5, traceArr);
+          console.log(pieceToShow[0].x, pieceToShow[0].y);
+          rc.linearPath(
+            pieceToShow.map((vec) => [vec.x, vec.y]),
+            { stroke: "white", strokeWidth: 2 }
+          );
+        });
+      }
+    } else {
+      tracesOnDrag = [] as vector[][];
+    }
+
+    t++;
   }
   animate();
 </script>
@@ -260,4 +303,26 @@ export interface Props {}
     transform: translate(-50%, -50%);
     color: var(--pallete4b);
   }
+
+  #magnet1:hover,
+  #magnet2:hover {
+    position: relative;
+    display: inline-block;
+    content: " ";
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--pallete4d);
+    box-shadow: 1px 1px 5px var(--pallete4d);
+  }
+
+  /* #magnet1::before,
+  #magnet2::before {
+    position: relative;
+    display: inline-block;
+    content: " ";
+    width: 100%;
+    height: 100%;
+    outline: 1px solid var(--pallete4a);
+    outline-offset: -1px;
+  } */
 </style>

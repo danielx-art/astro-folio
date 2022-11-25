@@ -8,8 +8,8 @@ export interface Props {}
   <div class="inner-container">
     <div class="myname">daniel</div>
     <div class="tags">
-      <div class="know-more">conheça mais></div>
-      <div class="contact-me">fale comigo!></div>
+      <div class="know-more">conheça mais{""}</div>
+      <div class="contact-me">fale comigo!{""}</div>
     </div>
   </div>
   <Supercanvas />
@@ -18,7 +18,7 @@ export interface Props {}
 <style>
   .hero-container {
     width: 100%;
-    height: 100vh;
+    height: 100%;
   }
   .inner-container {
     position: absolute;
@@ -32,6 +32,7 @@ export interface Props {}
     padding: 2vw 3.5vw 3.5vw 3.5vw;
     background-color: var(--pallete4b);
     box-shadow: 2px 2px var(--pallete4c);
+    z-index: 999;
   }
   .myname {
     font-size: 2rem;
@@ -48,5 +49,9 @@ export interface Props {}
   .tags > * {
     border-bottom: 1px dashed var(--pallete4e);
     padding: 1.2vw;
+  }
+  .tags > *:hover {
+    background-color: var(--pallete4a);
+    color: var(--pallete4b);
   }
 </style>

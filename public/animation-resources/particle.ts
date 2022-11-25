@@ -18,12 +18,12 @@ export default function createParticle({
   initialVelocity = vec(),
   initialAngularVelocity = vec(),
 
-  maxForce = 0.3,
+  maxForce = 1,
   maxTorque = 0.5,
   maxSpeed = 2,
   maxAngVel = 0.1,
-  translationDamping = 1,
-  rotationDamping = 0.9,
+  translationDamping = 0.95,
+  rotationDamping = 0.7,
 
   behaviours = [] as (() => Tbehaviour)[],
 }): Tparticle {

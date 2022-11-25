@@ -11,7 +11,7 @@ export type TtraceGrid = {
   showText: (sentence: string[], colorHigh: string, color: string) => void;
 };
 
-const traceGrid = function (
+export const traceGrid = function (
   numTracers: number,
   tracersLen: number,
   tracerLife: number,
@@ -150,104 +150,55 @@ const traceGrid = function (
   };
 };
 
-// const trace = function (
-//   particles: Tparticle[],
-//   boundary: Iparallelepiped,
-//   physics: string,
-//   steps: number,
-//   detail: number,
-//   from: vector[],
-//   filter?: (particle: Tparticle) => Tparticle[]
-// ) {
-//   let agents = filter ? particles.filter(filter) : particles;
+//I'm so proud of this function, this is a nice function:
+export const trace = function <T, F>(
+  field: (arg: T, data?: any) => F,
+  initVal: T,
+  inc: (point: T, field: F) => T,
+  steps: number,
+  data?: any
+): T[] {
+  let arr = [initVal];
 
-//   let tracing = [...from] as vector[];
+  for (let n = 0; n < steps; n++) {
+    let initField = field(initVal, data);
+    let incrementedValue = inc(initVal, initField);
+    arr.push(incrementedValue);
+    initVal = incrementedValue;
+  }
 
-//   let randomVectorInBoundary = () => {
-//     let randomX = ((Math.random() - 1 / 2) * boundary.w + boundary.x) as number;
-//     let randomY = ((Math.random() - 1 / 2) * boundary.h + boundary.y) as number;
-//     let randomZ = ((Math.random() - 1 / 2) * boundary.d + boundary.z) as number;
-//     return vec(randomX, randomY, randomZ);
-//   };
+  return arr;
+};
 
-//   if (tracing.length === 0) {
-//     tracing = [randomVectorInBoundary()];
-//   }
+export const smoothstep = function (
+  a: number = 0,
+  b: number = 1,
+  x: number
+): number {
+  let k = Math.max(0, Math.min(1, (x - a) / (b - a)));
+  return k * k * (3 - 2 * k);
+};
 
-//   let stepsToGo = steps - tracing.length;
+export const easeWalkTruArray = function <T>(
+  t: number,
+  totalDuration: number,
+  offset: number,
+  arr: T[]
+): T[] {
+  if (offset > 1) offset = 1;
+  if (offset < 0) offset = 0;
 
-//   for (let i = 1; i < stepsToGo; i++) {
-//     let lastPosition = tracing[tracing.length - 1];
+  let frontPercent = smoothstep(0, (totalDuration + offset) / 2, t);
+  let frontIndex = Math.round(frontPercent * (arr.length - 1));
 
-//     let totalField = vec();
-//     agents.forEach((particle) => {
-//       let field = particle["physics"][physics]
-//         ? (particle["physics"][physics].field(lastPosition, particle) as vector)
-//         : vec(0, 0, 0);
-//       totalField.add(field);
-//     });
+  let backPercent = smoothstep((totalDuration - offset) / 2, totalDuration, t);
+  let backIndex = Math.round(backPercent * (arr.length - 1));
 
-//     let newPosition = vec()
-//       .copy(lastPosition)
-//       .add(vec().copy(totalField).setMag(detail));
+  let result = [] as T[];
 
-//     tracing.push(newPosition);
+  for (let n = backIndex; n <= frontIndex; n++) {
+    result.push(arr[n]);
+  }
 
-//     // if (boundary.contains(newPosition)) {
-//     //   tracing.push(newPosition);
-//     // } else {
-//     //   tracing.push(lastPosition);
-//     // }
-//   }
-//   return tracing;
-// };
-
-// const traceGrid = function (
-//   particles: Tparticle[],
-//   boundary: Iparallelepiped,
-//   physics: string,
-//   steps: number,
-//   detail: number,
-//   from: vector[] = [],
-//   grid: Tgrid
-// ): vector[] {
-//   let tracing = [...from] as vector[];
-
-//   let randomInitialCell =
-//     grid.cells[Math.floor(grid.cells.length * Math.random())];
-
-//   if (tracing.length === 0) {
-//     tracing = [vec(...randomInitialCell.pos)];
-//   }
-
-//   let stepsToGo = steps - tracing.length;
-
-//   for (let i = 1; i < stepsToGo; i++) {
-//     let lastPosition = tracing[tracing.length - 1];
-
-//     let totalField = vec();
-//     particles.forEach((particle) => {
-//       let field = particle["physics"][physics]
-//         ? (particle["physics"][physics].field(lastPosition, particle) as vector)
-//         : vec(0, 0, 0);
-//       totalField.add(field);
-//     });
-
-//     let newPosition = vec()
-//       .copy(lastPosition)
-//       .add(vec().copy(totalField).setMag(detail));
-
-//     let nextBlock = grid.canvasToCell([newPosition.x, newPosition.y]);
-
-//     tracing.push(vec(...nextBlock));
-
-//     // if (boundary.contains(newPosition)) {
-//     //   tracing.push(newPosition);
-//     // } else {
-//     //   tracing.push(lastPosition);
-//     // }
-//   }
-//   return tracing;
-// };
-
-export { traceGrid };
+  return result;
+};
