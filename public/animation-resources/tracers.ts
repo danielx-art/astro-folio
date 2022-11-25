@@ -188,10 +188,18 @@ export const easeWalkTruArray = function <T>(
   if (offset > 1) offset = 1;
   if (offset < 0) offset = 0;
 
-  let frontPercent = smoothstep(0, (totalDuration + offset) / 2, t);
+  let frontPercent = smoothstep(
+    0,
+    (totalDuration + offset * totalDuration) / 2,
+    t
+  );
   let frontIndex = Math.round(frontPercent * (arr.length - 1));
 
-  let backPercent = smoothstep((totalDuration - offset) / 2, totalDuration, t);
+  let backPercent = smoothstep(
+    (totalDuration - offset * totalDuration) / 2,
+    totalDuration,
+    t
+  );
   let backIndex = Math.round(backPercent * (arr.length - 1));
 
   let result = [] as T[];

@@ -32,7 +32,24 @@ export interface Props {}
     padding: 2vw 3.5vw 3.5vw 3.5vw;
     background-color: var(--pallete4b);
     box-shadow: 2px 2px var(--pallete4c);
-    z-index: 999;
+    z-index: 1;
+  }
+  @media (min-width: 1024px) {
+    .inner-container {
+      position: absolute;
+      bottom: 5vw;
+      right: 50%;
+      transform: translateX(50%);
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      gap: 1.5vw;
+      font-family: Fira Code, monospace;
+      padding: 3vw 4vw 3vw 4vw;
+      background-color: var(--pallete4b);
+      box-shadow: 2px 2px var(--pallete4c);
+      z-index: 1;
+    }
   }
   .myname {
     font-size: 2rem;

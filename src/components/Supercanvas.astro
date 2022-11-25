@@ -38,6 +38,9 @@ export interface Props {}
   ----------------------------------------------------------*/
   const magnets = [magnet1, magnet2];
   let isDragging = -1;
+  const traceDraggingNumber = 10;
+  const traceDragDuration = 15;
+  const traceDragLen = 50;
   const textColor = getComputedStyle(textContent).color;
   const heroColor = getComputedStyle(heroCanvas).color;
   const magnetColor = getComputedStyle(magnets[0]).color;
@@ -49,7 +52,7 @@ export interface Props {}
   let magnetsSize = {} as { x: number; y: number };
   let w = window.innerWidth;
   let h = window.innerHeight;
-  const safeRadius = 2;
+  const safeRadius = 5;
   let rc = rough.canvas(herocanvas);
   const pixels = [] as string[];
   let gridTracers: TtraceGrid;
@@ -212,8 +215,10 @@ export interface Props {}
   ----------------------------------------------------------*/
   let t = 0;
   let tracesOnDrag = [] as vector[][];
+  let tracesOnDragInternalTime = Array(traceDraggingNumber).fill(0, 0);
 
   function animate() {
+    if (t > 1024) t = 0;
     requestAnimationFrame(animate);
 
     if (
@@ -229,40 +234,61 @@ export interface Props {}
     //grid.show(rc); //test & fun
     if (t % 11 == 0) {
       gridTracers.update();
-      t = 0;
     }
     gridTracers.showText(pixels, textColor, heroColor);
-    show();
 
-    //Hover effect
     if (isDragging != -1) {
       if (tracesOnDrag.length < 1) {
-        let vc = vec()
-          .random2D(magnetsSize.y)
-          .add(particles[isDragging].position);
-        //rc.circle(vc.x, vc.y, 100, { fill: "blue" }); //test
-        let traceArr = trace(
-          particles[isDragging].physics.magnet.field,
-          vc,
-          (a, b) => vec().copy(a).add(b.setMag(5)),
-          100,
-          particles[isDragging]
-        );
-        tracesOnDrag.push(traceArr);
-      } else {
-        tracesOnDrag.forEach((traceArr) => {
-          let pieceToShow = easeWalkTruArray(t, 10, 0.5, traceArr);
-          console.log(pieceToShow[0].x, pieceToShow[0].y);
-          rc.linearPath(
-            pieceToShow.map((vec) => [vec.x, vec.y]),
-            { stroke: "white", strokeWidth: 2 }
+        for (let n = 0; n < traceDraggingNumber; n++) {
+          let vc = vec()
+            .random2D(magnetsSize.y)
+            .add(particles[isDragging].position);
+          let traceArr = trace(
+            particles[isDragging].physics.magnet.field,
+            vc,
+            (a, b) => vec().copy(a).add(b.setMag(5)),
+            traceDragLen,
+            particles[isDragging]
           );
+          tracesOnDrag.push(traceArr);
+        }
+      } else {
+        tracesOnDrag.forEach((traceArr, index) => {
+          if (tracesOnDragInternalTime[index] > traceDragDuration) {
+            tracesOnDrag[index] = [];
+
+            let vc = vec()
+              .random2D(magnetsSize.y)
+              .add(particles[isDragging].position);
+            tracesOnDrag[index] = trace(
+              particles[isDragging].physics.magnet.field,
+              vc,
+              (a, b) => vec().copy(a).add(b.setMag(5)),
+              traceDragLen,
+              particles[isDragging]
+            );
+            tracesOnDragInternalTime[index] = 0;
+          }
+
+          let pieceToShow = easeWalkTruArray(
+            tracesOnDragInternalTime[index],
+            traceDragDuration,
+            0.3,
+            traceArr
+          );
+          //console.log(pieceToShow); //test
+          rc.curve(
+            pieceToShow.map((vec) => [vec.x, vec.y]),
+            { stroke: textColor, strokeWidth: 1 }
+          );
+
+          tracesOnDragInternalTime[index]++;
         });
       }
     } else {
       tracesOnDrag = [] as vector[][];
     }
-
+    show();
     t++;
   }
   animate();
@@ -302,6 +328,7 @@ export interface Props {}
     border: 1px solid var(--pallete4b);
     transform: translate(-50%, -50%);
     color: var(--pallete4b);
+    z-index: 2;
   }
 
   #magnet1:hover,
@@ -311,11 +338,11 @@ export interface Props {}
     content: " ";
     width: 100%;
     height: 100%;
-    border: 2px solid var(--pallete4d);
-    box-shadow: 1px 1px 5px var(--pallete4d);
+    border: 2px solid var(--pallete4a);
+    box-shadow: 1px 1px 5px var(--pallete4a);
   }
 
-  /* #magnet1::before,
+  #magnet1::before,
   #magnet2::before {
     position: relative;
     display: inline-block;
@@ -324,5 +351,5 @@ export interface Props {}
     height: 100%;
     outline: 1px solid var(--pallete4a);
     outline-offset: -1px;
-  } */
+  }
 </style>
