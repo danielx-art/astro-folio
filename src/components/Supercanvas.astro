@@ -20,7 +20,10 @@ export interface Props {}
     traceGrid,
     TtraceGrid,
   } from "../../public/animation-resources/tracers";
-  import { createGrid } from "../../public/animation-resources/gridCells";
+  import {
+    createGrid,
+    Tgrid,
+  } from "../../public/animation-resources/gridCells";
 
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
@@ -44,7 +47,7 @@ export interface Props {}
   const textColor = getComputedStyle(textContent).color;
   const heroColor = getComputedStyle(heroCanvas).color;
   const magnetColor = getComputedStyle(magnets[0]).color;
-  const sentence = " #web #código #educação #arte #design";
+  const sentence = "#web#código#educação#arte#design";
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize;
   const num = 2;
@@ -54,7 +57,6 @@ export interface Props {}
   let h = window.innerHeight;
   const safeRadius = 5;
   let rc = rough.canvas(herocanvas);
-  const pixels = [] as string[];
   let gridTracers: TtraceGrid;
 
   let mouse = { x: 0, y: 0 };
@@ -167,15 +169,26 @@ export interface Props {}
       "magnet"
     );
     //3. Fill the background string
-
-    for (let n = 0; n < grid.cells.length; n++) {
-      pixels.push(`${sentence.charAt(n % sentence.length)}`);
-    }
   }
 
   /*----------------------------------------------------------
   --------------------3-FUNCTIONS FOR LOOP--------------------
   ----------------------------------------------------------*/
+  let showRandomWords = function (bsentence: string, bpixels: string[]) {
+    let words = bsentence.split("#");
+    words.shift();
+    let howManySentences = Math.floor(bpixels.length / bsentence.length);
+    let randomSentenceIndex = Math.floor(Math.random() * howManySentences);
+    let randomWord = Math.floor(Math.random() * words.length);
+    let randomWordIndex = 0;
+    for (let n = 0; n < randomWord; n++) {
+      randomWordIndex += words[randomWord].length + 1;
+    }
+    let randomIndex = randomSentenceIndex + randomWordIndex;
+    ctx.fillStyle = textColor;
+    //ctx.fillText(char, cell.pos[0], cell.pos[1]);
+  };
+
   let update = () => {
     for (let i = 0; i < num; i++) {
       let thisParticle = particles[i];
@@ -235,7 +248,7 @@ export interface Props {}
     if (t % 11 == 0) {
       gridTracers.update();
     }
-    gridTracers.showText(pixels, textColor, heroColor);
+    gridTracers.showText(sentence, textColor, heroColor, magnetColor, t);
 
     if (isDragging != -1) {
       if (tracesOnDrag.length < 1) {
@@ -331,15 +344,17 @@ export interface Props {}
     z-index: 2;
   }
 
-  #magnet1:hover,
-  #magnet2:hover {
-    position: relative;
-    display: inline-block;
-    content: " ";
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--pallete4a);
-    box-shadow: 1px 1px 5px var(--pallete4a);
+  @media only screen {
+    #magnet1:hover,
+    #magnet2:hover {
+      position: relative;
+      display: inline-block;
+      content: " ";
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--pallete4a);
+      box-shadow: 1px 1px 5px var(--pallete4a);
+    }
   }
 
   #magnet1::before,

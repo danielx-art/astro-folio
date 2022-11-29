@@ -8,7 +8,13 @@ import { vec } from "./vetores";
 export type TtraceGrid = {
   traces: { life: number; t: number; arr: vector[] }[];
   update: () => void;
-  showText: (sentence: string[], colorHigh: string, color: string) => void;
+  showText: (
+    sentence: string,
+    colorHigh: string,
+    color: string,
+    colorTag: string,
+    time: number
+  ) => void;
 };
 
 export const traceGrid = function (
@@ -112,12 +118,22 @@ export const traceGrid = function (
     return gridPositions;
   };
 
+  let randomIndex = 0;
+  let len = 0;
   const showText = function (
-    sentence: string[],
+    sentence: string,
     colorHigh: string,
-    color: string
+    color: string,
+    colorTag: string,
+    time: number
   ) {
     if (!ctx) return;
+
+    const pixels = [] as string[];
+
+    for (let n = 0; n < grid.cells.length; n++) {
+      pixels.push(`${sentence.charAt(n % sentence.length)}`);
+    }
 
     grid.setCellProp("visited", (cell) => false);
 
@@ -133,14 +149,34 @@ export const traceGrid = function (
       ctx.font = `bold ${1 * grid.resx}px Monospace`;
       if (cell.visited) {
         ctx.fillStyle = colorHigh;
-        let char = sentence[index];
+        let char = pixels[index];
         ctx.fillText(char, cell.pos[0], cell.pos[1]);
       } else {
         ctx.fillStyle = color;
-        let char = sentence[index];
+        let char = pixels[index];
         ctx.fillText(char, cell.pos[0], cell.pos[1]);
       }
     });
+
+    if (time == 0 || time % 145 == 0) {
+      let words = sentence.split("#");
+      words.shift;
+      let howManySentences = Math.floor(pixels.length / sentence.length);
+      let randomSentenceIndex =
+        Math.floor(Math.random() * howManySentences) * sentence.length;
+      let randomWord = Math.floor(Math.random() * words.length);
+      let randomWordIndex = sentence.search(words[randomWord]);
+      randomIndex = randomSentenceIndex + randomWordIndex;
+      len = words[randomWord].length;
+    }
+    ctx.fillStyle = colorTag;
+    for (let n = 0; n < len; n++) {
+      ctx.fillText(
+        pixels[randomIndex + n],
+        grid.cells[randomIndex + n].pos[0],
+        grid.cells[randomIndex + n].pos[1]
+      );
+    }
   };
 
   return {

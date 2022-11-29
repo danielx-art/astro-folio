@@ -30,8 +30,6 @@ export interface Props {}
     gap: 1.5vw;
     font-family: Fira Code, monospace;
     padding: 2vw 3.5vw 3.5vw 3.5vw;
-    background-color: var(--pallete4b);
-    box-shadow: 2px 2px var(--pallete4c);
     z-index: 1;
   }
   @media (max-width: 1024px) {
@@ -39,7 +37,6 @@ export interface Props {}
       position: absolute;
       bottom: 5vw;
       right: 50%;
-      width: 90%;
       transform: translateX(50%);
       display: flex;
       flex-flow: column nowrap;
@@ -47,14 +44,12 @@ export interface Props {}
       gap: 1.5vw;
       font-family: Fira Code, monospace;
       padding: 3vw 4vw 3vw 4vw;
-      background-color: var(--pallete4b);
-      box-shadow: 2px 2px var(--pallete4c);
       z-index: 1;
     }
   }
   .myname {
     font-size: 2rem;
-    color: var(--pallete4a);
+    color: var(--pallete4b);
   }
   .tags {
     display: flex;
@@ -65,8 +60,9 @@ export interface Props {}
     color: var(--pallete4a);
   }
   .tags > * {
-    border-bottom: 1px dashed var(--pallete4e);
     padding: 1.2vw;
+    background-color: var(--pallete4b);
+    box-shadow: 2px 2px var(--pallete4c);
   }
   .tags > *:hover {
     background-color: var(--pallete4a);
