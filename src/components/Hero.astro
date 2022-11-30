@@ -45,25 +45,52 @@ export interface Props {}
       font-family: Fira Code, monospace;
       padding: 3vw 4vw 3vw 4vw;
       z-index: 1;
+      width: 100%;
     }
   }
   .myname {
     font-size: 2rem;
     color: var(--pallete4b);
   }
+
+  @media (max-width: 1024px) {
+    .myname {
+      font-size: 1.8rem;
+      color: var(--pallete4b);
+    }
+  }
+
   .tags {
     display: flex;
     flex-flow: column nowrap;
     gap: 0.7rem;
-    font-size: 1.5rem;
     font-style: italic;
     color: var(--pallete4a);
   }
   .tags > * {
+    font-size: 1.5rem;
     padding: 1.2vw;
-    background-color: var(--pallete4b);
-    box-shadow: 2px 2px var(--pallete4c);
+    box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
+    border-radius: 100px;
   }
+
+  @media (max-width: 1024px) {
+    .tags > * {
+      font-size: 1.2rem;
+      padding: 0.8rem;
+      box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
+      border-radius: 100px;
+    }
+  }
+
+  .know-more {
+    background-color: var(--pallete4c);
+  }
+
+  .contact-me {
+    background-color: var(--pallete4b);
+  }
+
   .tags > *:hover {
     background-color: var(--pallete4a);
     color: var(--pallete4b);

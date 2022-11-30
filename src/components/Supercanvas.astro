@@ -16,8 +16,8 @@ export interface Props {}
   import type { Tparticle } from "../../public/animation-resources/types";
   import {
     easeWalkTruArray,
-    trace,
     traceGrid,
+    traceVectorField,
     TtraceGrid,
   } from "../../public/animation-resources/tracers";
   import {
@@ -174,20 +174,20 @@ export interface Props {}
   /*----------------------------------------------------------
   --------------------3-FUNCTIONS FOR LOOP--------------------
   ----------------------------------------------------------*/
-  let showRandomWords = function (bsentence: string, bpixels: string[]) {
-    let words = bsentence.split("#");
-    words.shift();
-    let howManySentences = Math.floor(bpixels.length / bsentence.length);
-    let randomSentenceIndex = Math.floor(Math.random() * howManySentences);
-    let randomWord = Math.floor(Math.random() * words.length);
-    let randomWordIndex = 0;
-    for (let n = 0; n < randomWord; n++) {
-      randomWordIndex += words[randomWord].length + 1;
-    }
-    let randomIndex = randomSentenceIndex + randomWordIndex;
-    ctx.fillStyle = textColor;
-    //ctx.fillText(char, cell.pos[0], cell.pos[1]);
-  };
+  // let showRandomWords = function (bsentence: string, bpixels: string[]) {
+  //   let words = bsentence.split("#");
+  //   words.shift();
+  //   let howManySentences = Math.floor(bpixels.length / bsentence.length);
+  //   let randomSentenceIndex = Math.floor(Math.random() * howManySentences);
+  //   let randomWord = Math.floor(Math.random() * words.length);
+  //   let randomWordIndex = 0;
+  //   for (let n = 0; n < randomWord; n++) {
+  //     randomWordIndex += words[randomWord].length + 1;
+  //   }
+  //   let randomIndex = randomSentenceIndex + randomWordIndex;
+  //   ctx.fillStyle = textColor;
+  //   //ctx.fillText(char, cell.pos[0], cell.pos[1]);
+  // };
 
   let update = () => {
     for (let i = 0; i < num; i++) {
@@ -219,7 +219,7 @@ export interface Props {}
 
   let show = () => {
     particles.forEach((particle) => {
-      particle.show(rc, magnetsSize, magnetColor);
+      particle.show(rc, magnetsSize, heroColor);
     });
   };
 
@@ -248,7 +248,7 @@ export interface Props {}
     if (t % 11 == 0) {
       gridTracers.update();
     }
-    gridTracers.showText(sentence, textColor, heroColor, magnetColor, t);
+    gridTracers.showText(sentence, textColor, heroColor, textColor, t);
 
     if (isDragging != -1) {
       if (tracesOnDrag.length < 1) {
@@ -256,8 +256,8 @@ export interface Props {}
           let vc = vec()
             .random2D(magnetsSize.y)
             .add(particles[isDragging].position);
-          let traceArr = trace(
-            particles[isDragging].physics.magnet.field,
+          let traceArr = traceVectorField(
+            particles.map((particle) => particle.physics.magnet.field),
             vc,
             (a, b) => vec().copy(a).add(b.setMag(5)),
             traceDragLen,
@@ -273,8 +273,8 @@ export interface Props {}
             let vc = vec()
               .random2D(magnetsSize.y)
               .add(particles[isDragging].position);
-            tracesOnDrag[index] = trace(
-              particles[isDragging].physics.magnet.field,
+            tracesOnDrag[index] = traceVectorField(
+              particles.map((particle) => particle.physics.magnet.field),
               vc,
               (a, b) => vec().copy(a).add(b.setMag(5)),
               traceDragLen,
@@ -342,19 +342,6 @@ export interface Props {}
     transform: translate(-50%, -50%);
     color: var(--pallete4b);
     z-index: 2;
-  }
-
-  @media only screen {
-    #magnet1:hover,
-    #magnet2:hover {
-      position: relative;
-      display: inline-block;
-      content: " ";
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--pallete4a);
-      box-shadow: 1px 1px 5px var(--pallete4a);
-    }
   }
 
   #magnet1::before,

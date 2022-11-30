@@ -206,6 +206,26 @@ export const trace = function <T, F>(
   return arr;
 };
 
+export const traceVectorField = function (
+  fields: ((arg: vector, data?: any) => vector)[],
+  initVal: vector,
+  inc: (point: vector, field: vector) => vector,
+  steps: number,
+  data?: any
+): vector[] {
+  let arr = [initVal];
+
+  for (let n = 0; n < steps; n++) {
+    let initField = vec();
+    fields.forEach((field) => initField.add(field(initVal, data)));
+    let incrementedValue = inc(initVal, initField);
+    arr.push(incrementedValue);
+    initVal = incrementedValue;
+  }
+
+  return arr;
+};
+
 export const smoothstep = function (
   a: number = 0,
   b: number = 1,
