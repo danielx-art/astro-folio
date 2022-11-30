@@ -125,7 +125,7 @@ export type Ttree = {
 
 export type Tbehaviour = {
   name: string;
-  field: (pointInSpace: vector, from: Tparticle) => vector;
+  field: (pointInSpace: vector, from: Tparticle[]) => vector;
   forces: (agents: Tparticle[], particle: Tparticle) => void;
   hasMoved: (newState: Tparticle) => void;
   [otherProperties: string]: any;

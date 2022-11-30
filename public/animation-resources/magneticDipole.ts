@@ -5,22 +5,27 @@ import { vec } from "./vetores";
 export default function magneticDipole(): Tbehaviour {
   let m = vec().random2D(10);
 
-  let field = (pointInSpace: vector, from: Tparticle) => {
-    let vecr = vec().copy(pointInSpace).sub(vec().copy(from.position));
-    let versorr = vec().copy(vecr).setMag(1);
-    let r = vecr.mag();
-    if (r > 5) {
-      /*note
-        this is redundant since particle will only act on particles outside a "tooClose" or
-        safeRadius as worked on the particleSystem and collisionDetection themselves
-        */
-      let B = vec().copy(versorr);
-      B.mult(3 * vec().copy(m).dot(versorr));
-      B.sub(m);
-      B.div(r * r * r);
-      return B;
-    }
-    return vec();
+  let field = (pointInSpace: vector, from: Tparticle[]) => {
+    let Bres = vec();
+    from.forEach((particleFrom) => {
+      let vecr = vec()
+        .copy(pointInSpace)
+        .sub(vec().copy(particleFrom.position));
+      let versorr = vec().copy(vecr).setMag(1);
+      let r = vecr.mag();
+      if (r > 5) {
+        /*note
+          this is redundant since particle will only act on particles outside a "tooClose" or
+          safeRadius as worked on the particleSystem and collisionDetection themselves
+          */
+        let B = vec().copy(versorr);
+        B.mult(3 * vec().copy(m).dot(versorr));
+        B.sub(m);
+        B.div(r * r * r);
+        Bres.add(B);
+      }
+    });
+    return Bres;
   };
 
   let forces = (agents: Tparticle[], particle: Tparticle) => {
@@ -30,7 +35,7 @@ export default function magneticDipole(): Tbehaviour {
     let Tmagres = vec();
 
     agents.forEach(function (agent, i) {
-      let B = agent.physics.magnet.field(particle.position, agent);
+      let B = agent.physics.magnet.field(particle.position, [agent]);
 
       //translation, force
       //approximation of partial derivatives
@@ -42,7 +47,7 @@ export default function magneticDipole(): Tbehaviour {
             particle.position.y,
             particle.position.z
           ),
-          agent
+          [agent]
         )
         .sub(B)
         .div(dinf)
@@ -54,7 +59,7 @@ export default function magneticDipole(): Tbehaviour {
             particle.position.y + dinf,
             particle.position.z
           ),
-          agent
+          [agent]
         )
         .sub(B)
         .div(dinf)
@@ -66,7 +71,7 @@ export default function magneticDipole(): Tbehaviour {
             particle.position.y,
             particle.position.z + dinf
           ),
-          agent
+          [agent]
         )
         .sub(B)
         .div(dinf)

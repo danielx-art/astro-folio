@@ -51,6 +51,7 @@ export interface Props {}
   .myname {
     font-size: 2rem;
     color: var(--pallete4b);
+    user-select: none;
   }
 
   @media (max-width: 1024px) {
@@ -72,6 +73,8 @@ export interface Props {}
     padding: 1.2vw;
     box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
     border-radius: 100px;
+    cursor: pointer;
+    user-select: none;
   }
 
   @media (max-width: 1024px) {
@@ -91,8 +94,15 @@ export interface Props {}
     background-color: var(--pallete4b);
   }
 
-  .tags > *:hover {
+  .know-more:hover {
+    background-color: var(--pallete4a);
+    color: var(--pallete4c);
+    outline: 2px dashed var(--pallete4c);
+  }
+
+  .contact-me:hover {
     background-color: var(--pallete4a);
     color: var(--pallete4b);
+    outline: 2px dashed var(--pallete4b);
   }
 </style>

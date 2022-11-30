@@ -20,10 +20,7 @@ export interface Props {}
     traceVectorField,
     TtraceGrid,
   } from "../../public/animation-resources/tracers";
-  import {
-    createGrid,
-    Tgrid,
-  } from "../../public/animation-resources/gridCells";
+  import { createGrid } from "../../public/animation-resources/gridCells";
 
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
@@ -41,7 +38,7 @@ export interface Props {}
   ----------------------------------------------------------*/
   const magnets = [magnet1, magnet2];
   let isDragging = -1;
-  const traceDraggingNumber = 10;
+  const traceDraggingNumber = 5;
   const traceDragDuration = 15;
   const traceDragLen = 50;
   const textColor = getComputedStyle(textContent).color;
@@ -77,10 +74,12 @@ export interface Props {}
     isDragging = id;
     start.x = e.x;
     start.y = e.y;
+    magnets[isDragging].style.borderColor = textColor;
   };
 
   let mouseUp = function (e: MouseEvent | TouchEvent, id: number) {
     e.preventDefault();
+    magnets[isDragging].style.borderColor = magnetColor;
     isDragging = -1;
   };
 
@@ -174,21 +173,6 @@ export interface Props {}
   /*----------------------------------------------------------
   --------------------3-FUNCTIONS FOR LOOP--------------------
   ----------------------------------------------------------*/
-  // let showRandomWords = function (bsentence: string, bpixels: string[]) {
-  //   let words = bsentence.split("#");
-  //   words.shift();
-  //   let howManySentences = Math.floor(bpixels.length / bsentence.length);
-  //   let randomSentenceIndex = Math.floor(Math.random() * howManySentences);
-  //   let randomWord = Math.floor(Math.random() * words.length);
-  //   let randomWordIndex = 0;
-  //   for (let n = 0; n < randomWord; n++) {
-  //     randomWordIndex += words[randomWord].length + 1;
-  //   }
-  //   let randomIndex = randomSentenceIndex + randomWordIndex;
-  //   ctx.fillStyle = textColor;
-  //   //ctx.fillText(char, cell.pos[0], cell.pos[1]);
-  // };
-
   let update = () => {
     for (let i = 0; i < num; i++) {
       let thisParticle = particles[i];
@@ -261,7 +245,7 @@ export interface Props {}
             vc,
             (a, b) => vec().copy(a).add(b.setMag(5)),
             traceDragLen,
-            particles[isDragging]
+            particles
           );
           tracesOnDrag.push(traceArr);
         }
@@ -278,7 +262,7 @@ export interface Props {}
               vc,
               (a, b) => vec().copy(a).add(b.setMag(5)),
               traceDragLen,
-              particles[isDragging]
+              particles
             );
             tracesOnDragInternalTime[index] = 0;
           }

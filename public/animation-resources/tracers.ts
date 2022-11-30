@@ -64,10 +64,9 @@ export const traceGrid = function (
 
           let totalField = vec();
           particles.forEach((particle) => {
-            let field = particle["physics"][physics].field(
-              lastPosition,
-              particle
-            ) as vector;
+            let field = particle["physics"][physics].field(lastPosition, [
+              particle,
+            ]) as vector;
             totalField.add(field);
           });
 
@@ -214,7 +213,6 @@ export const traceVectorField = function (
   data?: any
 ): vector[] {
   let arr = [initVal];
-
   for (let n = 0; n < steps; n++) {
     let initField = vec();
     fields.forEach((field) => initField.add(field(initVal, data)));
