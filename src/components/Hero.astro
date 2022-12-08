@@ -1,10 +1,43 @@
 ---
 import Supercanvas from "./Supercanvas.astro";
+export interface Props {
+  lang: "pt-br" | "en";
+}
+const { lang } = Astro.props;
 
-export interface Props {}
+const text = {
+  "pt-br": [
+    "Oi! Eu sou o ",
+    " e seja bem vinde a minha página! Eu ensino física e matemática, faço uns visuais e crio websites interessantes.",
+  ],
+  en: [
+    "Hi! I'm ",
+    " and welcome to my homepage! I teach physics and math, make some visuals and build interesting websites.",
+  ],
+};
+
+const buttons = {
+  "pt-br": ["Vem dar uma olhada>", "Fale comigo>"],
+  en: ["Take a look", "Talk to me"],
+};
 ---
 
 <div class="hero-container">
+  <div class="inner-container">
+    <div class="text">
+      {text[lang][0]}<span class="myname">Daniel</span>{text[lang][1]}
+      <div class="menu">
+        <span class="button know-more">{buttons[lang][0]}</span>
+        ou
+        <span class="button contact-me">{buttons[lang][1]}</span>
+      </div>
+    </div>
+  </div>
+  <div class="gradient"></div>
+  <Supercanvas />
+</div>
+
+<!-- <div class="hero-container">
   <div class="inner-container">
     <div class="myname">daniel</div>
     <div class="tags">
@@ -13,63 +46,99 @@ export interface Props {}
     </div>
   </div>
   <Supercanvas />
-</div>
+</div> -->
 
 <style>
   .hero-container {
     width: 100%;
     height: 100%;
   }
+  .gradient {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0),
+      var(--pallete4a) 80%
+    );
+    user-select: none;
+  }
   .inner-container {
     position: absolute;
-    bottom: 5vw;
-    right: 5vw;
     display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    gap: 1.5vw;
-    font-family: Fira Code, monospace;
-    padding: 2vw 3.5vw 3.5vw 3.5vw;
+    justify-content: end;
+    bottom: 0;
+    padding: 2vw 3.5vw 3rem 3.5vw;
     z-index: 1;
   }
   @media (max-width: 1024px) {
     .inner-container {
-      position: absolute;
-      bottom: 5vw;
-      right: 50%;
-      transform: translateX(50%);
-      display: flex;
-      flex-flow: column nowrap;
-      align-items: center;
-      gap: 1.5vw;
-      font-family: Fira Code, monospace;
-      padding: 3vw 4vw 3vw 4vw;
-      z-index: 1;
-      width: 100%;
+      padding: 2vw 3rem 2rem 3rem;
     }
   }
+
   .myname {
-    font-size: 2rem;
-    color: var(--pallete4b);
+    color: white;
     user-select: none;
   }
 
+  .text {
+    width: 60%;
+    /* color: rgba(255, 255, 255, 0.8); */
+    color: var(--pallete4c);
+    font-family: Fira Code, monospace;
+    line-height: 2rem;
+    font-size: 1rem;
+    text-align: justify;
+    text-align-last: right;
+    user-select: none;
+    text-shadow: 0px 0px 15px var(--pallete4a);
+  }
+
+  .menu {
+    text-align: center;
+  }
+
   @media (max-width: 1024px) {
-    .myname {
-      font-size: 1.8rem;
-      color: var(--pallete4b);
+    .text {
+      width: 100%;
+      text-align: center;
+      text-align-last: auto;
     }
   }
 
-  .tags {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 0.7rem;
-    font-style: italic;
+  .button {
+    line-height: 3rem;
+    text-transform: uppercase;
+    text-shadow: none;
     color: var(--pallete4a);
+    cursor: pointer;
+    padding: 0.2rem 0.8rem 0.2rem 0.8rem;
+    border-radius: 3rem;
   }
-  .tags > * {
-    font-size: 1.5rem;
+
+  .know-more {
+    background-color: var(--pallete4c);
+  }
+
+  .contact-me {
+    background-color: var(--pallete4b);
+  }
+
+  .know-more:hover {
+    background: none;
+    color: var(--pallete4c);
+    outline: 2px dashed var(--pallete4c);
+  }
+
+  .contact-me:hover {
+    background: none;
+    color: var(--pallete4b);
+    outline: 2px dashed var(--pallete4b);
+  }
+
+  /* 
+  .text > * {
     padding: 1.2vw;
     box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
     border-radius: 100px;
@@ -78,14 +147,14 @@ export interface Props {}
   }
 
   @media (max-width: 1024px) {
-    .tags > * {
+    .text > * {
       font-size: 1.2rem;
       padding: 0.8rem;
       box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
       border-radius: 100px;
     }
   }
-
+  
   .know-more {
     background-color: var(--pallete4c);
   }
@@ -104,5 +173,5 @@ export interface Props {}
     background-color: var(--pallete4a);
     color: var(--pallete4b);
     outline: 2px dashed var(--pallete4b);
-  }
+  } */
 </style>

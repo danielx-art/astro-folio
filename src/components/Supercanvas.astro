@@ -302,8 +302,14 @@ export interface Props {}
     overflow: hidden;
     width: 100%;
     height: 100%;
-    font-size: max(2.2vw, 3vh);
+    font-size: 1.2rem;
     color: var(--pallete4c);
+  }
+
+  @media (max-width: 1024px) {
+    #background-vfx {
+      font-size: 1rem;
+    }
   }
 
   #hero-canvas {
@@ -322,20 +328,11 @@ export interface Props {}
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid var(--pallete4b);
+    border: 1px solid var(--pallete4c);
     transform: translate(-50%, -50%);
     color: var(--pallete4b);
     z-index: 2;
-  }
-
-  #magnet1::before,
-  #magnet2::before {
-    position: relative;
-    display: inline-block;
-    content: " ";
-    width: 100%;
-    height: 100%;
-    outline: 1px solid var(--pallete4a);
-    outline-offset: -1px;
+    background-color: white;
+    mix-blend-mode: overlay;
   }
 </style>
