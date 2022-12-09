@@ -4,7 +4,8 @@ export interface Props {
   lang: string;
 }
 
-const { title, lang } = Astro.props;
+let { title, lang } = Astro.props;
+let woohoo = "pt-br";
 ---
 
 <!DOCTYPE html>
@@ -23,12 +24,37 @@ const { title, lang } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <div id="langBtn">
+      <span id="brbtn">BR</span><span>|</span><span id="enbtn">EN</span>
+    </div>
     <slot />
-    <script></script>
+    <script define:vars={{ woohoo }}>
+      function handleClick() {
+        console.log(woohoo);
+      }
+      document
+        ?.getElementById("langBtn")
+        ?.addEventListener("click", handleClick);
+    </script>
     <style is:global>
       * {
         overscroll-behavior: contain;
       }
+
+      #langBtn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 0;
+        padding: 0.3rem;
+        width: fit-content;
+        color: white;
+        font-family: Fira Code, monospace;
+        font-size: 0.8rem;
+        cursor: pointer;
+        z-index: 999;
+      }
+
       :root {
         --pallete1a: #283d3b;
         --pallete1aA: #283d3b10;

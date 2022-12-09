@@ -1,9 +1,9 @@
 ---
 import Supercanvas from "./Supercanvas.astro";
 export interface Props {
-  lang: "pt-br" | "en";
+  lang: string;
 }
-const { lang } = Astro.props;
+let { lang } = Astro.props;
 
 const text = {
   "pt-br": [
