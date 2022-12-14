@@ -3,10 +3,14 @@ import Supercanvas from "./Supercanvas.astro";
 export interface Props {
   lang: string;
 }
-let { lang } = Astro.props;
+const { lang } = Astro.props;
 
-const text = {
-  "pt-br": [
+type data = {
+  [lang: string]: string[];
+};
+
+const text: data = {
+  br: [
     "Oi! Eu sou o ",
     " e seja bem vinde a minha página! Eu ensino física e matemática, faço uns visuais e crio websites interessantes.",
   ],
@@ -16,8 +20,8 @@ const text = {
   ],
 };
 
-const buttons = {
-  "pt-br": ["Vem dar uma olhada>", "Fale comigo>"],
+const buttons: data = {
+  br: ["Vem dar uma olhada>", "Fale comigo>"],
   en: ["Take a look", "Talk to me"],
 };
 ---

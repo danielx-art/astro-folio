@@ -4,8 +4,7 @@ export interface Props {
   lang: string;
 }
 
-let { title, lang } = Astro.props;
-let woohoo = "pt-br";
+const { title, lang } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -24,26 +23,28 @@ let woohoo = "pt-br";
     <title>{title}</title>
   </head>
   <body>
-    <div id="langBtn">
-      <span id="brbtn">BR</span><span>|</span><span id="enbtn">EN</span>
-    </div>
+    <a id="langBtn" href={lang == "br" ? "en" : "br"}
+      ><span class={lang == "br" ? "highlight" : "no-highlight"}>BR</span> | <span
+        class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
+      >
+    </a>
     <slot />
-    <script define:vars={{ woohoo }}>
-      function handleClick() {
-        console.log(woohoo);
-      }
-      document
-        ?.getElementById("langBtn")
-        ?.addEventListener("click", handleClick);
-    </script>
     <style is:global>
       * {
         overscroll-behavior: contain;
       }
 
+      .highlight {
+        opacity: 0.9;
+      }
+
+      .no-highlight {
+        opacity: 0.3;
+      }
+
       #langBtn {
         position: absolute;
-        right: 0;
+        right: 0.3rem;
         top: 0;
         margin: 0;
         padding: 0.3rem;
@@ -53,6 +54,7 @@ let woohoo = "pt-br";
         font-size: 0.8rem;
         cursor: pointer;
         z-index: 999;
+        text-decoration: none;
       }
 
       :root {
@@ -103,5 +105,8 @@ let woohoo = "pt-br";
           DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
       }
     </style>
+    <script is:global>
+      const langBtn = document.getElementById("langBtn");
+    </script>
   </body>
 </html>
