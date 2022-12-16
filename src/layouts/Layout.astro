@@ -23,7 +23,7 @@ const { title, lang } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <a id="langBtn" href={lang == "br" ? "en" : ""}
+    <a id="langBtn" href={lang == "br" ? "en" : import.meta.env.BASE_URL}
       ><span class={lang == "br" ? "highlight" : "no-highlight"}>BR</span> | <span
         class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
       >
