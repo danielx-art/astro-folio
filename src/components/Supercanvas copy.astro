@@ -44,6 +44,7 @@ export interface Props {}
   const textColor = getComputedStyle(textContent).color;
   const heroColor = getComputedStyle(heroCanvas).color;
   const magnetColor = getComputedStyle(magnets[0]).color;
+  const sentence = "#web#código#educação#arte#design";
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize;
   const num = 2;
@@ -53,6 +54,7 @@ export interface Props {}
   let h = window.innerHeight;
   const safeRadius = 5;
   let rc = rough.canvas(herocanvas);
+  let gridTracers: TtraceGrid;
 
   let mouse = { x: 0, y: 0 };
   let start = { x: 0, y: 0 };
@@ -144,6 +146,28 @@ export interface Props {}
       });
       particles.push(newParticle);
     }
+
+    //2. Initialize grid
+    let grid = createGrid(
+      [herocanvas.width, herocanvas.height],
+      [gridFontSize, gridFontSize]
+    );
+    let numTracers = 6;
+    let tracersLen = 10;
+    let tracerLife = 5;
+    let tracerLifeVariation = 0.1;
+    //2.b Initalize tracers
+    gridTracers = traceGrid(
+      numTracers,
+      tracersLen,
+      tracerLife,
+      tracerLifeVariation,
+      grid,
+      ctx,
+      particles,
+      "magnet"
+    );
+    //3. Fill the background string
   }
 
   /*----------------------------------------------------------
@@ -205,6 +229,10 @@ export interface Props {}
     update();
     move();
     //grid.show(rc); //test & fun
+    if (t % 11 == 0) {
+      gridTracers.update();
+    }
+    gridTracers.showText(sentence, textColor, heroColor, textColor, t);
 
     if (isDragging != -1) {
       if (tracesOnDrag.length < 1) {
@@ -300,11 +328,11 @@ export interface Props {}
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid white;
+    border: 1px solid var(--pallete4c);
     transform: translate(-50%, -50%);
     color: var(--pallete4b);
     z-index: 2;
-    /* background-color: white;
-    mix-blend-mode: overlay; */
+    background-color: white;
+    mix-blend-mode: overlay;
   }
 </style>

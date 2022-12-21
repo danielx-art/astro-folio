@@ -62,9 +62,12 @@ const buttons: data = {
     height: 100%;
     width: 100%;
     background-image: linear-gradient(
-      rgba(255, 255, 255, 0),
-      var(--pallete4a) 80%
+      to bottom right,
+      var(--pallete4b) -100%,
+      rgba(0, 0, 0, 1) 80%
     );
+    opacity: 1;
+    mix-blend-mode: lighten;
     user-select: none;
   }
   .inner-container {
