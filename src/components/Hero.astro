@@ -31,9 +31,8 @@ const buttons: data = {
     <div class="text">
       {text[lang][0]}<span class="myname">Daniel</span>{text[lang][1]}
       <div class="menu">
-        <span class="button know-more">{buttons[lang][0]}</span>
-        ou
-        <span class="button contact-me">{buttons[lang][1]}</span>
+        <div class="button know-more">{buttons[lang][0]}</div>
+        <div class="button contact-me">{buttons[lang][1]}</div>
       </div>
     </div>
   </div>
@@ -103,7 +102,32 @@ const buttons: data = {
   }
 
   .menu {
-    text-align: center;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+  }
+
+  @media (max-width: 1024px) {
+    .text {
+      width: 100%;
+      text-align: center;
+      text-align-last: auto;
+    }
+    .menu {
+      justify-content: center;
+    }
+  }
+
+  .button {
+    display: inline-block;
+
+    line-height: 2rem;
+    text-transform: uppercase;
+    text-shadow: none;
+    color: var(--pallete4a);
+    cursor: pointer;
+    padding: 0.2rem 0.8rem 0.2rem 0.8rem;
+    border-radius: 3rem;
   }
 
   @media (max-width: 1024px) {
@@ -114,16 +138,6 @@ const buttons: data = {
     }
   }
 
-  .button {
-    line-height: 3rem;
-    text-transform: uppercase;
-    text-shadow: none;
-    color: var(--pallete4a);
-    cursor: pointer;
-    padding: 0.2rem 0.8rem 0.2rem 0.8rem;
-    border-radius: 3rem;
-  }
-
   .know-more {
     background-color: var(--pallete4c);
   }
@@ -143,42 +157,4 @@ const buttons: data = {
     color: var(--pallete4b);
     outline: 2px dashed var(--pallete4b);
   }
-
-  /* 
-  .text > * {
-    padding: 1.2vw;
-    box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
-    border-radius: 100px;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  @media (max-width: 1024px) {
-    .text > * {
-      font-size: 1.2rem;
-      padding: 0.8rem;
-      box-shadow: 2px 2px 0px 0.4rem var(--pallete4a);
-      border-radius: 100px;
-    }
-  }
-  
-  .know-more {
-    background-color: var(--pallete4c);
-  }
-
-  .contact-me {
-    background-color: var(--pallete4b);
-  }
-
-  .know-more:hover {
-    background-color: var(--pallete4a);
-    color: var(--pallete4c);
-    outline: 2px dashed var(--pallete4c);
-  }
-
-  .contact-me:hover {
-    background-color: var(--pallete4a);
-    color: var(--pallete4b);
-    outline: 2px dashed var(--pallete4b);
-  } */
 </style>
