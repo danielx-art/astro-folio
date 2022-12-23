@@ -24,6 +24,11 @@ for (let i = 0; i < subPaths.length; i++) {
 }
 
 linkPath = linkPath.slice(0, -1); //remove last '/'
+
+let testPath1 = Astro.url;
+let testPath2 = Astro.site;
+console.log(testPath1);
+console.log(testPath2);
 ---
 
 <!DOCTYPE html>
@@ -55,8 +60,13 @@ linkPath = linkPath.slice(0, -1); //remove last '/'
           class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
         >
       </a>
+      <div>{Astro.url}</div>
     </nav>
     <slot />
+    <script define:vars={{ testPath1, testPath2 }}>
+      console.log(testPath1);
+      console.log(testPath2);
+    </script>
     <style is:global>
       * {
         overscroll-behavior: contain;
