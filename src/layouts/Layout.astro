@@ -5,6 +5,25 @@ export interface Props {
 }
 
 const { title, lang } = Astro.props;
+
+const pathname = new URL(Astro.request.url).pathname;
+
+let splittedPath = pathname.split("/");
+
+let subPaths = splittedPath.filter((item) => item != "en" && item != "");
+
+subPaths.splice(0, 1);
+
+let basePath = import.meta.env.BASE_URL;
+let homePath = lang == "br" ? basePath : basePath + "en";
+const areWeHome = pathname == homePath;
+let linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
+
+for (let i = 0; i < subPaths.length; i++) {
+  linkPath += subPaths[i] + "/";
+}
+
+linkPath = linkPath.slice(0, -1); //remove last '/'
 ---
 
 <!DOCTYPE html>
@@ -23,11 +42,20 @@ const { title, lang } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <a id="langBtn" href={lang == "br" ? "en" : import.meta.env.BASE_URL}
-      ><span class={lang == "br" ? "highlight" : "no-highlight"}>BR</span> | <span
-        class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
-      >
-    </a>
+    <nav class="nav_menu">
+      {
+        !areWeHome && (
+          <a id="homeBtn" href={homePath}>
+            ◄
+          </a>
+        )
+      }
+      <a id="langBtn" href={linkPath}
+        ><span class={lang == "br" ? "highlight" : "no-highlight"}>BR</span> | <span
+          class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
+        >
+      </a>
+    </nav>
     <slot />
     <style is:global>
       * {
@@ -42,19 +70,28 @@ const { title, lang } = Astro.props;
         opacity: 0.3;
       }
 
-      #langBtn {
+      .nav_menu {
         position: absolute;
         right: 0.3rem;
         top: 0;
         margin: 0;
         padding: 0.3rem;
         width: fit-content;
-        color: white;
         font-family: Fira Code, monospace;
-        font-size: 0.8rem;
         cursor: pointer;
         z-index: 999;
+      }
+
+      #homeBtn {
+        font-size: 1rem;
         text-decoration: none;
+        color: white;
+      }
+
+      #langBtn {
+        font-size: 0.8rem;
+        text-decoration: none;
+        color: white;
       }
 
       :root {
@@ -105,8 +142,5 @@ const { title, lang } = Astro.props;
           DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
       }
     </style>
-    <script is:global>
-      const langBtn = document.getElementById("langBtn");
-    </script>
   </body>
 </html>
