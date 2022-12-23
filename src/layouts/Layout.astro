@@ -14,10 +14,19 @@ let subPaths = splittedPath.filter((item) => item != "en" && item != "");
 
 subPaths.splice(0, 1);
 
-let basePath = import.meta.env.BASE_URL;
+let basePath = Astro.url.origin;
 let homePath = lang == "br" ? basePath : basePath + "en";
 const areWeHome = pathname == homePath;
-let linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
+//let site = Astro.site as string;
+
+let linkPath = "";
+linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
+
+// if(import.meta.env.DEV == true){
+//   linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
+// } else {
+//   linkPath = lang == "br" ? site+"en/" : areWeHome ? site + "/" : site;
+// }
 
 for (let i = 0; i < subPaths.length; i++) {
   linkPath += subPaths[i] + "/";
@@ -27,8 +36,8 @@ linkPath = linkPath.slice(0, -1); //remove last '/'
 
 let testPath1 = Astro.url;
 let testPath2 = Astro.site;
-console.log(testPath1);
-console.log(testPath2);
+console.log(testPath1.origin);
+console.log(testPath2?.origin);
 ---
 
 <!DOCTYPE html>
@@ -60,12 +69,11 @@ console.log(testPath2);
           class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
         >
       </a>
-      <div>{Astro.url}</div>
     </nav>
     <slot />
-    <script define:vars={{ testPath1, testPath2 }}>
-      console.log(testPath1);
-      console.log(testPath2);
+    <script define:vars={{ a: testPath1.origin, b: testPath2?.origin }}>
+      console.log(a);
+      console.log(b);
     </script>
     <style is:global>
       * {
