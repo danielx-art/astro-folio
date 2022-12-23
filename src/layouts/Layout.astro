@@ -6,6 +6,8 @@ export interface Props {
 
 const { title, lang } = Astro.props;
 
+const urlObj = new URL(Astro.request.url).pathname;
+
 const pathname = Astro.url.href;
 
 let splittedPath = pathname.split("/");
@@ -18,15 +20,15 @@ let basePath = Astro.url.origin + "/astro-folio";
 let homePath = lang == "br" ? basePath + "/" : basePath + "/en/";
 const areWeHome = pathname == homePath;
 
-//let linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
+let changeLangPath = lang == "br" ? basePath + "/en/" : basePath + "/";
 
-let linkPath = homePath;
-
-for (let i = 0; i < subPaths.length; i++) {
-  linkPath += subPaths[i] + "/";
+for (let i = 2; i < subPaths.length; i++) {
+  changeLangPath += subPaths[i] + "/";
 }
 
-linkPath = linkPath.slice(0, -1); //remove last '/'
+if (areWeHome == false) {
+  changeLangPath = changeLangPath.slice(0, -1); //remove last '/'
+}
 
 console.log(pathname);
 console.log(subPaths);
@@ -56,18 +58,19 @@ console.log(subPaths);
           </a>
         )
       }
-      <a id="langBtn" href={linkPath}
+      <a id="langBtn" href={changeLangPath}
         ><span class={lang == "br" ? "highlight" : "no-highlight"}>BR</span> | <span
           class={lang == "en" ? "highlight" : "no-highlight"}>EN</span
         >
       </a>
     </nav>
     <slot />
-    <script define:vars={{ pathname, homePath, subPaths, areWeHome }}>
+    <script define:vars={{ pathname, homePath, subPaths, areWeHome, urlObj }}>
       console.log(pathname);
       console.log(homePath);
       console.log(subPaths);
       console.log(areWeHome);
+      console.log(urlObj);
     </script>
     <style is:global>
       * {
