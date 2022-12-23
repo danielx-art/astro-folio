@@ -6,8 +6,6 @@ export interface Props {
 
 const { title, lang } = Astro.props;
 
-const urlObj = new URL(Astro.request.url).pathname;
-
 const pathname = Astro.url.href;
 
 let splittedPath = pathname.split("/");
@@ -29,9 +27,6 @@ for (let i = 2; i < subPaths.length; i++) {
 if (areWeHome == false) {
   changeLangPath = changeLangPath.slice(0, -1); //remove last '/'
 }
-
-console.log(pathname);
-console.log(subPaths);
 ---
 
 <!DOCTYPE html>
@@ -65,13 +60,6 @@ console.log(subPaths);
       </a>
     </nav>
     <slot />
-    <script define:vars={{ pathname, homePath, subPaths, areWeHome, urlObj }}>
-      console.log(pathname);
-      console.log(homePath);
-      console.log(subPaths);
-      console.log(areWeHome);
-      console.log(urlObj);
-    </script>
     <style is:global>
       * {
         overscroll-behavior: contain;
