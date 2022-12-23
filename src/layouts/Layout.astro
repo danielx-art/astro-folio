@@ -6,7 +6,7 @@ export interface Props {
 
 const { title, lang } = Astro.props;
 
-const pathname = new URL(Astro.request.url).pathname;
+const pathname = Astro.url.href;
 
 let splittedPath = pathname.split("/");
 
@@ -14,19 +14,13 @@ let subPaths = splittedPath.filter((item) => item != "en" && item != "");
 
 subPaths.splice(0, 1);
 
-let basePath = Astro.url.origin;
-let homePath = lang == "br" ? basePath : basePath + "en";
+let basePath = Astro.url.origin + "/astro-folio";
+let homePath = lang == "br" ? basePath + "/" : basePath + "/en/";
 const areWeHome = pathname == homePath;
-//let site = Astro.site as string;
 
-let linkPath = "";
-linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
+//let linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
 
-// if(import.meta.env.DEV == true){
-//   linkPath = lang == "br" ? "en/" : areWeHome ? basePath + "/" : basePath;
-// } else {
-//   linkPath = lang == "br" ? site+"en/" : areWeHome ? site + "/" : site;
-// }
+let linkPath = homePath;
 
 for (let i = 0; i < subPaths.length; i++) {
   linkPath += subPaths[i] + "/";
@@ -34,10 +28,8 @@ for (let i = 0; i < subPaths.length; i++) {
 
 linkPath = linkPath.slice(0, -1); //remove last '/'
 
-let testPath1 = Astro.url;
-let testPath2 = Astro.site;
-console.log(testPath1.origin);
-console.log(testPath2?.origin);
+console.log(pathname);
+console.log(subPaths);
 ---
 
 <!DOCTYPE html>
@@ -71,9 +63,11 @@ console.log(testPath2?.origin);
       </a>
     </nav>
     <slot />
-    <script define:vars={{ a: testPath1.origin, b: testPath2?.origin }}>
-      console.log(a);
-      console.log(b);
+    <script define:vars={{ pathname, homePath, subPaths, areWeHome }}>
+      console.log(pathname);
+      console.log(homePath);
+      console.log(subPaths);
+      console.log(areWeHome);
     </script>
     <style is:global>
       * {
