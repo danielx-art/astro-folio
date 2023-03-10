@@ -1,9 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { projectsPage } from "../../../public/content-dictionary";
 ---
 
 <Layout title="Daniel Folio" lang="en">
-  <div class="projects-container">copy and translate projects from br</div>
+  <div class="projects-container">
+    <h1 class="title">{projectsPage.title.en}</h1>
+  </div>
 </Layout>
 
 <style>
@@ -12,8 +15,5 @@ import Layout from "../../layouts/Layout.astro";
     height: 100%;
     background-color: black;
     color: white;
-  }
-
-  .inner-container {
   }
 </style>

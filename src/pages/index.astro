@@ -2,35 +2,21 @@
 import Supercanvas from "../components/Supercanvas.astro";
 import Layout from "../layouts/Layout.astro";
 const lang = "br";
-type data = {
-  [lang: string]: string[];
-};
-
-const text: data = {
-  br: [
-    "Oi! Eu sou o ",
-    " e seja bem vinde a minha página! Eu ensino física e matemática, faço uns visuais e crio websites interessantes.",
-  ],
-  en: [
-    "Hi! I'm ",
-    " and welcome to my homepage! I teach physics and math, make some visuals and build interesting websites.",
-  ],
-};
-
-const buttons: data = {
-  br: ["Vem dar uma olhada>", "Fale comigo>"],
-  en: ["Take a look", "Talk to me"],
-};
+import { indexPage } from "../../public/content-dictionary";
 ---
 
 <Layout title="Daniel Folio" lang={lang}>
-  <div class="hero-container">
+  <div class="w-full h-full">
     <div class="inner-container">
       <div class="text">
-        {text[lang][0]}<span class="myname">Daniel</span>{text[lang][1]}
+        {indexPage.text[lang][0]}<span class="myname">Daniel</span>{
+          indexPage.text[lang][1]
+        }
         <div class="menu">
-          <a class="button know-more" href="projects">{buttons[lang][0]}</a>
-          <a class="button contact-me">{buttons[lang][1]}</a>
+          <a class="button know-more" href="projects"
+            >{indexPage.buttons[lang][0]}</a
+          >
+          <a class="button contact-me">{indexPage.buttons[lang][1]}</a>
         </div>
       </div>
     </div>
@@ -58,7 +44,7 @@ const buttons: data = {
     .inner-container {
       position: absolute;
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       bottom: 0;
       padding: 2vw 3.5vw 3rem 3.5vw;
       z-index: 1;
