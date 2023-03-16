@@ -16,6 +16,8 @@ const buttons: langData = {
   en: ["Take a look", "Talk to me"],
 };
 
+const basePath = "https://danielx-art.github.io/astro-folio";
+
 export const Hero: React.FC<{ lang: string }> = ({ lang }) => {
   return (
     <>
@@ -30,7 +32,7 @@ export const Hero: React.FC<{ lang: string }> = ({ lang }) => {
         <div className="flex flex-row flex-wrap my-4 gap-4 justify-center text-lg font-fira mx-auto">
           <a
             className="text-white hover:text-pallete4c outline-2 outline-dashed outline-white hover:outline-2 hover:outline-pallete4c  inline-block shadow-none cursor-pointer px-4 py-3 rounded-full"
-            href="projects"
+            href={`${basePath}/${lang}/projects`}
           >
             {buttons[lang][0]}
           </a>
