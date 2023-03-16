@@ -1,7 +1,8 @@
 import { getCollection } from "astro:content";
 const projects = await getCollection("projects");
+//const basePath = "https://danielx-art.github.io/astro-folio"
 
-export const Projects: React.FC = () => {
+export const Projects: React.FC<{ basePath: string }> = ({ basePath }) => {
   return (
     <div className="w-full h-full p-4 text-white">
       {projects.map((project, index) => {
@@ -18,7 +19,7 @@ export const Projects: React.FC = () => {
               <div className="w-fit flex flex-row gap-6">
                 {project.data.techs.map((tech, techIndex) => (
                   <img
-                    src={`/tech-logos/${tech}.png`}
+                    src={`${basePath}/tech-logos/${tech}.png`}
                     className="w-8 aspect-square object-contain"
                     key={techIndex}
                   ></img>
@@ -27,7 +28,7 @@ export const Projects: React.FC = () => {
             </div>
             <div className="w-1/2 relative">
               <img
-                src={`/projects/thumbs/${index + 1}.png`}
+                src={`${basePath}/projects/thumbs/${index + 1}.png`}
                 className="w-full aspect-square object-contain m-0 p-0"
               ></img>
               <div className="w-fit bg-blue-500 py-1 px-4 rounded-md absolute right-1/2 translate-x-1/2 -translate-y-1/2">

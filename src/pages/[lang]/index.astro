@@ -10,11 +10,13 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 
 typeof lang === "string" ? null : (lang = "br");
+
+const basePath = Astro.url.origin + "/astro-folio";
 ---
 
 <Layout title="Daniel Folio" lang={lang}>
   <div class="w-full h-full">
-    <Hero lang={lang} />
+    <Hero lang={lang} basePath={basePath} />
     <Supercanvas />
     <div
       class="absolute w-full h-full opacity-30 bg-blend-lighten select-none bg-gradient-to-br from-pallete4b to-black-80"

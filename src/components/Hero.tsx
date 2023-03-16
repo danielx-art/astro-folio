@@ -16,9 +16,10 @@ const buttons: langData = {
   en: ["Take a look", "Talk to me"],
 };
 
-const basePath = "https://danielx-art.github.io/astro-folio";
-
-export const Hero: React.FC<{ lang: string }> = ({ lang }) => {
+export const Hero: React.FC<{ lang: string; basePath: string }> = ({
+  lang,
+  basePath,
+}) => {
   return (
     <>
       <div className="w-full h-full absolute flex flex-col justify-center px-12 z-10">
