@@ -1,0 +1,24 @@
+---
+import { Hero } from "../../components/Hero";
+import Supercanvas from "../../components/Supercanvas.astro";
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "br" } }, { params: { lang: "en" } }];
+}
+
+let { lang } = Astro.params;
+
+typeof lang === "string" ? null : (lang = "br");
+---
+
+<Layout title="Daniel Folio" lang={lang}>
+  <div class="w-full h-full">
+    <Hero lang={lang} />
+    <Supercanvas />
+    <div
+      class="absolute w-full h-full opacity-30 bg-blend-lighten select-none bg-gradient-to-br from-pallete4b to-black-80"
+    >
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,25 @@
+---
+import type { langData } from "../../components/Hero";
+import { Projects } from "../../components/Projects";
+import Layout from "../../layouts/Layout.astro";
+const title: langData = {
+  br: ["Projetos"],
+  en: ["Projects"],
+};
+export function getStaticPaths() {
+  return [{ params: { lang: "br" } }, { params: { lang: "en" } }];
+}
+
+let { lang } = Astro.params;
+
+typeof lang === "string" ? null : (lang = "br");
+---
+
+<Layout title="Daniel Folio" lang={lang}>
+  <div class="bg-black min-h-full">
+    <h1 class="text-white text-2xl px-4 py-2">
+      {title[lang]}
+    </h1>
+    <Projects />
+  </div>
+</Layout>

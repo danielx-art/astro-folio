@@ -10,22 +10,20 @@ const pathname = Astro.url.href;
 
 let splittedPath = pathname.split("/");
 
-let subPaths = splittedPath.filter((item) => item != "en" && item != "");
+let subPaths = splittedPath.filter(
+  (item) => item != "en" && item != "" && item != "br"
+);
 
 subPaths.splice(0, 1);
 
 let basePath = Astro.url.origin + "/astro-folio";
-let homePath = lang == "br" ? basePath + "/" : basePath + "/en/";
-const areWeHome = pathname == homePath;
+let homePath = lang == "br" ? basePath + "/br/" : basePath + "/en/";
+const areWeHome = pathname == homePath || pathname == basePath + "/";
 
-let changeLangPath = lang == "br" ? basePath + "/en/" : basePath + "/";
+let changeLangPath = lang == "br" ? basePath + "/en/" : basePath + "/br/";
 
 for (let i = 2; i < subPaths.length; i++) {
   changeLangPath += subPaths[i] + "/";
-}
-
-if (areWeHome == false) {
-  changeLangPath = changeLangPath.slice(0, -1); //remove last '/'
 }
 ---
 

@@ -1,134 +1,17 @@
 ---
 import Supercanvas from "../components/Supercanvas.astro";
 import Layout from "../layouts/Layout.astro";
+import { Hero } from "../components/Hero";
 const lang = "br";
-import { indexPage } from "../../public/content-dictionary";
 ---
 
 <Layout title="Daniel Folio" lang={lang}>
   <div class="w-full h-full">
-    <div class="inner-container">
-      <div class="text">
-        {indexPage.text[lang][0]}<span class="myname">Daniel</span>{
-          indexPage.text[lang][1]
-        }
-        <div class="menu">
-          <a class="button know-more" href="projects"
-            >{indexPage.buttons[lang][0]}</a
-          >
-          <a class="button contact-me">{indexPage.buttons[lang][1]}</a>
-        </div>
-      </div>
-    </div>
-    <div class="gradient"></div>
+    <Hero lang={lang} />
     <Supercanvas />
+    <div
+      class="absolute w-full h-full opacity-30 bg-blend-lighten select-none bg-gradient-to-br from-pallete4b to-black-80"
+    >
+    </div>
   </div>
-  <style>
-    .hero-container {
-      width: 100%;
-      height: 100%;
-    }
-    .gradient {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      background-image: linear-gradient(
-        to bottom right,
-        var(--pallete4b) -100%,
-        rgba(0, 0, 0, 1) 80%
-      );
-      opacity: 1;
-      mix-blend-mode: lighten;
-      user-select: none;
-    }
-    .inner-container {
-      position: absolute;
-      display: flex;
-      justify-content: flex-end;
-      bottom: 0;
-      padding: 2vw 3.5vw 3rem 3.5vw;
-      z-index: 1;
-    }
-    @media (max-width: 1024px) {
-      .inner-container {
-        padding: 2vw 3rem 2rem 3rem;
-      }
-    }
-
-    .myname {
-      color: white;
-      user-select: none;
-    }
-
-    .text {
-      width: 60%;
-      /* color: rgba(255, 255, 255, 0.8); */
-      color: var(--pallete4c);
-      font-family: Fira Code, monospace;
-      line-height: 2rem;
-      font-size: 1rem;
-      text-align: justify;
-      text-align-last: right;
-      user-select: none;
-      text-shadow: 0px 0px 15px var(--pallete4a);
-    }
-
-    .menu {
-      margin-top: 0.5rem;
-      display: flex;
-      flex-flow: row wrap;
-      gap: 1rem;
-    }
-
-    @media (max-width: 1024px) {
-      .text {
-        width: 100%;
-        text-align: center;
-        text-align-last: auto;
-      }
-      .menu {
-        justify-content: center;
-      }
-    }
-
-    .button {
-      display: inline-block;
-
-      line-height: 2rem;
-      text-transform: uppercase;
-      text-shadow: none;
-      color: var(--pallete4a);
-      cursor: pointer;
-      padding: 0.2rem 0.8rem 0.2rem 0.8rem;
-      border-radius: 3rem;
-    }
-
-    @media (max-width: 1024px) {
-      .text {
-        width: 100%;
-        text-align: center;
-        text-align-last: auto;
-      }
-    }
-
-    .know-more {
-      background-color: var(--pallete4c);
-    }
-
-    .contact-me {
-      background-color: var(--pallete4b);
-    }
-
-    .know-more:hover {
-      background: none;
-      color: var(--pallete4c);
-      outline: 2px dashed var(--pallete4c);
-    }
-
-    .contact-me:hover {
-      background: none;
-      color: var(--pallete4b);
-      outline: 2px dashed var(--pallete4b);
-    }
-  </style>
 </Layout>
