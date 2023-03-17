@@ -127,17 +127,59 @@ export interface Props {}
     };
 
     //1.Initialize magnets
+    //a. get two random positions in an arc - works only for two particles
+    let positionsTwoArcsDistributionKinda = () => {
+      const [minDimension, maxDimension] = [Math.min(w, h), Math.max(w, h)];
+      const [minMagnetSize, maxMagnetSize] = [
+        Math.min(magnetsSize.x, magnetsSize.y),
+        Math.max(magnetsSize.x, magnetsSize.y),
+      ];
+      let arcRadius = Math.abs(minDimension - maxMagnetSize) / 2;
+      let arcCenters =
+        maxDimension == w
+          ? [
+              vec(w / 2 - 0.2 * w - arcRadius, 0),
+              vec(-(w / 2 - 0.2 * w - arcRadius), 0),
+            ]
+          : [
+              vec(0, h / 2 - 0.2 * h - arcRadius),
+              vec(0, -(h / 2 - 0.2 * h - arcRadius)),
+            ];
+      let randomArcOne = arcCenters[0]
+        .add(
+          vec()
+            .copy(arcCenters[0])
+            .setMag(arcRadius)
+            .rotate(((Math.random() * 2 - 1) * Math.PI) / 2)
+        )
+        .add(vec(w / 2, h / 2));
+      let randomArcTwo = arcCenters[1]
+        .add(
+          vec()
+            .copy(arcCenters[1])
+            .setMag(arcRadius)
+            .rotate(((Math.random() * 2 - 1) * Math.PI) / 2)
+        )
+        .add(vec(w / 2, h / 2));
+      return [randomArcOne, randomArcTwo];
+    };
+
+    let positions = positionsTwoArcsDistributionKinda();
+
+    //b. instanciate and populate the particles
     particles = [];
     for (let n = 0; n < num; n++) {
-      let randomPosition = vec(
-        0.2 * w + 0.6 * Math.random() * w,
-        0.2 * h + 0.6 * Math.random() * h,
-        0
-      );
+      // //comment session 'a' and uncomment this for more then two particles, also the position argument on the createParticle function bellow
+      // let randomPosition = vec(
+      //   0.2 * w + 0.6 * Math.random() * w,
+      //   0.2 * h + 0.6 * Math.random() * h,
+      //   0
+      // );
 
       let newParticle = createParticle({
         index: n,
-        position: randomPosition,
+        //position: randomPosition,
+        position: positions[n],
         direction: vec().random2D(1),
 
         behaviours: [magneticDipole],
