@@ -12,8 +12,8 @@ const text: langData = {
   ],
 };
 const buttons: langData = {
-  br: ["Vem dar uma olhada", "Fale comigo"],
-  en: ["Take a look", "Talk to me"],
+  br: ["Vem dar uma olhada"],
+  en: ["Take a look"],
 };
 
 export const Hero: React.FC<{ lang: string; basePath: string }> = ({
@@ -37,9 +37,6 @@ export const Hero: React.FC<{ lang: string; basePath: string }> = ({
           >
             {buttons[lang][0]}
           </a>
-          {/* <a className="bg-transparent text-pallete4b outline-2 outline-dashed outline-pallete4b hover:bg-pallete4b inline-block shadow-none hover:text-white cursor-pointer px-4 py-3 rounded-full">
-              {buttons[lang][1]}
-            </a> */}
         </div>
         <SocialMediaBar />
       </div>

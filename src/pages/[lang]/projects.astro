@@ -1,4 +1,5 @@
 ---
+import { Footer } from "../../components/Footer";
 import type { langData } from "../../components/Hero";
 import { Projects } from "../../components/Projects";
 import Layout from "../../layouts/Layout.astro";
@@ -6,6 +7,7 @@ const title: langData = {
   br: ["Projetos"],
   en: ["Projects"],
 };
+
 export function getStaticPaths() {
   return [{ params: { lang: "br" } }, { params: { lang: "en" } }];
 }
@@ -18,12 +20,13 @@ const basePath = Astro.url.origin + "/astro-folio";
 ---
 
 <Layout title="Daniel Folio" lang={lang}>
-  <div class="bg-pallete4a min-h-full">
+  <div class="bg-pallete4a min-h-full text-center text-white pt-4 pb-8">
     <h1
       class="text-pallete4c sm:rotate-0 -rotate-90 absolute translate-y-full sm:translate-y-0 -translate-x-1/3 sm:translate-x-0 sm:relative font-bold text-xl opacity-100 sm:pl-16 sm:pt-12 pt-2 text text-center sm:text-left"
     >
       {title[lang]}
     </h1>
     <Projects basePath={basePath} lang={lang} />
+    <Footer lang={lang} />
   </div>
 </Layout>
