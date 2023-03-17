@@ -16,7 +16,7 @@ export const Projects: React.FC<{ basePath: string; lang: string }> = ({
             <div className="sm:w-3/5 p-4 sm:h-100 flex flex-col justify-center gap-4">
               <h2 className="text-lg font-bold">{project.data.title[lang]}</h2>
 
-              <div className="">{project.data.description[lang]}</div>
+              <div className="text-left">{project.data.description[lang]}</div>
 
               <div className="w-fit flex flex-row gap-6 self-center sm:mt-8">
                 {project.data.techs.map((tech, techIndex) => (
