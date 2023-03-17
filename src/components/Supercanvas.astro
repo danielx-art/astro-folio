@@ -150,7 +150,7 @@ export interface Props {}
           vec()
             .copy(arcCenters[0])
             .setMag(arcRadius)
-            .rotate(((Math.random() * 2 - 1) * Math.PI) / 2)
+            .rotate(((Math.random() * 2 - 1) * Math.PI) / 3)
         )
         .add(vec(w / 2, h / 2));
       let randomArcTwo = arcCenters[1]
@@ -158,7 +158,7 @@ export interface Props {}
           vec()
             .copy(arcCenters[1])
             .setMag(arcRadius)
-            .rotate(((Math.random() * 2 - 1) * Math.PI) / 2)
+            .rotate(((Math.random() * 2 - 1) * Math.PI) / 3)
         )
         .add(vec(w / 2, h / 2));
       return [randomArcOne, randomArcTwo];
