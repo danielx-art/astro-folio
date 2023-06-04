@@ -1,7 +1,7 @@
 ---
 import { Footer } from "../../components/Footer";
-import type { langData } from "../../components/Hero";
-import { Projects } from "../../components/Projects";
+import type { langData } from "../../page-components/Hero";
+import { Projects } from "../../page-components/Projects";
 import Layout from "../../layouts/Layout.astro";
 const title: langData = {
   br: ["Projetos"],
@@ -21,11 +21,11 @@ const basePath = Astro.url.origin + "/astro-folio";
 
 <Layout title="Daniel Folio" lang={lang}>
   <div class="bg-pallete4a min-h-full text-center text-white pt-4 pb-8">
-    <h1
-      class="z-20 text-pallete4c sm:opacity-20 opacity-30 sm:text-8xl -rotate-90 translate-x-[-40%] translate-y-[150%] sm:transform-none translate text-4xl uppercase fixed sm:-top-2 font-bold px-2 font-fira"
+    <!-- <h1
+      class="z-20 text-pallete4c opacity-10 sm:text-8xl -rotate-90 translate-x-[-40%] translate-y-[150%] sm:transform-none translate text-4xl uppercase fixed sm:-top-2 font-bold px-2 font-fira"
     >
       {title[lang]}
-    </h1>
+    </h1> -->
     <Projects basePath={basePath} lang={lang} />
     <Footer lang={lang} />
   </div>

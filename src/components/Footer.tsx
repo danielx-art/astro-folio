@@ -1,4 +1,4 @@
-import type { langData } from "./Hero";
+import type { langData } from "../page-components/Hero";
 
 const buttons: langData = {
   br: ["Fale comigo"],

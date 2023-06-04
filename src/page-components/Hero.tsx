@@ -1,4 +1,4 @@
-import { SocialMediaBar } from "./SocialMediaBar";
+import { SocialMediaBar } from "../components/SocialMediaBar";
 export type langData = {
   [lang: string]: string[];
 };
@@ -30,9 +30,9 @@ export const Hero: React.FC<{ lang: string; basePath: string }> = ({
             </div>
           ))}
         </div>
-        <div className="flex flex-row flex-wrap my-4 gap-4 justify-center text-lg font-fira mx-auto">
+        <div className="flex flex-row flex-wrap my-4 gap-4 justify-center text-lg font-fira mx-auto select-none">
           <a
-            className="text-white hover:text-pallete4c outline-2 outline-dashed outline-white hover:outline-2 hover:outline-pallete4c  inline-block shadow-none cursor-pointer px-4 py-3 rounded-full"
+            className="select-none hover:select-none text-white hover:text-pallete4c outline-2 outline-dashed outline-white hover:outline-2 hover:outline-pallete4c  inline-block shadow-none cursor-pointer px-4 py-3 rounded-full"
             href={`${basePath}/${lang}/projects`}
           >
             {buttons[lang][0]}
