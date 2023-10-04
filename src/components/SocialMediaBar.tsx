@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export const SocialMediaBar: React.FC = () => {
   return (
-    <div className="flez flex-row mx-auto w-fit mt-2">
+    <div className="flex flex-row mx-auto mt-auto mb-8">
       <SocialMediaIcon link="https://github.com/danielx-art">
         <svg
           xmlns="http://www.w3.org/2000/svg"

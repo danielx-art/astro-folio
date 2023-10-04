@@ -1,0 +1,57 @@
+---
+export interface Props {}
+---
+
+<div id="background-vfx">
+  <canvas id="hero-canvas"> </canvas>
+</div>
+<script defer src="../../public/animation-resources/supercanvas.ts" type="module">
+</script>
+
+<style>
+#background-vfx {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2rem;
+    color: var(--pallete4c);
+    display: inline-block;
+}
+
+@media (max-width: 1024px) {
+    #background-vfx {
+    font-size: 0.5rem;
+    }
+}
+
+#hero-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -10;
+    background-color: var(--pallete4a);
+    color: var(--pallete4b);
+}
+
+.magnet1 {
+    position: absolute;
+    top: 30;
+    left: 30;
+    width: 300px;
+    height: 300px;
+    border: 1px solid var(--pallete4b);
+    transform: translate(-50%, -50%);
+    color: var(--pallete4b);
+    z-index: 20;
+    /* background-color: white;
+    mix-blend-mode: overlay; */
+  }
+</style>
