@@ -18,11 +18,11 @@ export default function createParticle({
   initialVelocity = vec(),
   initialAngularVelocity = vec(),
 
-  maxForce = 1,
+  maxForce = 0.001,
   maxTorque = 0.5,
   maxSpeed = 2,
   maxAngVel = 0.1,
-  translationDamping = 0.95,
+  translationDamping = 0.999,
   rotationDamping = 0.7,
 
   behaviours = [] as (() => Tbehaviour)[],
@@ -60,25 +60,25 @@ export default function createParticle({
         physics[phenom].forces(agents, self);
       });
     },
-    move: function () {
+    move: function (customMaxSpeed, customMaxForce, customMaxAngVel, customMaxTorque) {
       //console.log("acl:", acl); //debugg
-      acl.limit(maxForce / inertialMass);
+      acl.limit((customMaxForce || maxForce) / inertialMass);
       //console.log("acl:", acl); //debugg
       vel.add(acl);
       //console.log("vel:", vel); //debugg
       vel.mult(translationDamping);
       //console.log("vel:", vel); //debugg
-      vel.limit(maxSpeed);
+      vel.limit(customMaxSpeed || maxSpeed);
       //console.log("vel:", vel); //debugg
 
       position.add(vel);
       acl.mult(0);
 
       //rotation
-      angacl.limit(maxTorque / momentInertia);
+      angacl.limit((customMaxTorque || maxTorque) / momentInertia);
       angvel.add(angacl);
       angvel.mult(rotationDamping);
-      angvel.limit(maxAngVel);
+      angvel.limit(customMaxAngVel|| maxAngVel);
       let deltadir = angvel.cross(direction);
       direction.add(deltadir).setMag(1);
       angacl.mult(0);
@@ -99,10 +99,10 @@ export default function createParticle({
     get z() {
       return this.position.z;
     },
-    show: function (
+    showAsBox: function (
       canvasContext: RoughCanvas,
       particleSize: { x: number; y: number },
-      magnetColor: string
+      color: string
     ) {
       let pos = this.position;
       let mainAxis = vec(this.direction.x, this.direction.y, 0).setMag(
@@ -146,7 +146,7 @@ export default function createParticle({
         ],
         {
           stroke: "none",
-          fill: magnetColor,
+          fill: color,
         }
       );
     },

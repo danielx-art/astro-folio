@@ -55,6 +55,7 @@ const vec = function (x = 0, y = 0, z = 0): vector {
       return Math.sqrt(self.dot(self));
     },
     setMag: function (newmag: number) {
+      if(self.mag()==0) self.x = 1;
       self.mult(newmag / self.mag());
       return this;
     },

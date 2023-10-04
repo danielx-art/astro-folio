@@ -1,16 +1,20 @@
-import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { ProjectLinks } from "../components/ProjectLinks";
 import { ProjectTechs } from "../components/ProjectTechs";
-const projects = await getCollection("projects");
 
-export const ProjectsPage: React.FC<{ basePath: string; lang: string }> = ({
+export type TProjectsPage = {
+  basePath: string;
+  content: CollectionEntry<"projects">[] ;
+}
+
+export const ProjectsPage: React.FC<TProjectsPage> = ({
   basePath,
-  lang,
+  content,
 }) => {
   return (
     <div className="bg-pallete4a w-full min-h-full sm:p-4 text-white sm:mt-12">
       <div className="flex flex-wrap gap-8 justify-items-center items-center">
-        {projects.map((project, index) => {
+        {content.map((project, index) => {
           return (
             <div
               key={project.id}
@@ -31,10 +35,10 @@ export const ProjectsPage: React.FC<{ basePath: string; lang: string }> = ({
                 />
               )}
               <div className="my-4 text-2xl font-bold text-pallete4c">
-                {project.data.title[lang]}
+                {project.data.title}
               </div>
               <div className="my-4 text-md text-center">
-                {project.data.description[lang]}
+                {project.data.description}
               </div>
               <ProjectTechs techs={project.data.techs} basePath={basePath} />
             </div>

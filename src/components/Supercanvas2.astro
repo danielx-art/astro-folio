@@ -1,0 +1,251 @@
+---
+export interface Props {}
+---
+
+<div id="background-vfx">
+  <canvas id="hero-canvas"> </canvas>
+</div>
+
+<script>
+  import rough from "roughjs";
+  import { vec, vector } from "../../public/animation-resources/vetores";
+  import createParticle from "../../public/animation-resources/particle";
+  import boids from "../../public/animation-resources/boids"
+  import type { Tparticle } from "../../public/animation-resources/types";
+
+  /*----------------------------------------------------------
+  --------------------0-GET DOM ELEMENTS----------------------
+  ----------------------------------------------------------*/
+  const textContent = document.querySelector("#background-vfx") as HTMLElement;
+  const heroCanvas = document.querySelector("#hero-canvas") as HTMLElement;
+  const magnet1 = document.querySelector("#magnet1") as HTMLDivElement;
+  const magnet2 = document.querySelector("#magnet2") as HTMLDivElement;
+  const herocanvas = document.getElementById(
+    "hero-canvas"
+  ) as HTMLCanvasElement;
+
+  /*----------------------------------------------------------
+  --------------------1-GLOBAL VARIABLES----------------------
+  ----------------------------------------------------------*/
+  let isDragging = false;
+  const textColor = getComputedStyle(textContent).color;
+  const heroColor = getComputedStyle(heroCanvas).color;
+  var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
+  let gridFontSize: number;
+  const num = 15;
+  let particles = [] as Tparticle[];
+  let w = window.innerWidth;
+  let h = window.innerHeight;
+  const safeRadius = 5;
+  let rc = rough.canvas(herocanvas);
+
+  let mouse = { x: 0, y: 0 };
+  let start = { x: 0, y: 0 };
+
+  let mouseMove = function (e: MouseEvent) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  };
+
+  let mouseDown = function (e: MouseEvent) {
+    e.preventDefault;
+    start.x = e.x;
+    start.y = e.y;
+    mouse.x = e.x;
+    mouse.y = e.y;
+    isDragging = true;
+  };
+
+  let mouseUp = function (e: MouseEvent | TouchEvent) {
+    e.preventDefault();
+    isDragging = false;
+  };
+
+  window.onmousemove = mouseMove;
+  window.onmousedown = (e) => mouseDown(e);
+  window.onmouseup = (e) => mouseUp(e);
+
+  let touchMove = function (e: TouchEvent) {
+    mouse.x = e.changedTouches[0].clientX;
+    mouse.y = e.changedTouches[0].clientY;
+
+    if (isDragging) {
+
+    }
+  };
+
+  let touchStart = function (e: TouchEvent) {
+    e.preventDefault;
+    isDragging = true;
+    start.x = e.changedTouches[0].clientX;
+    start.y = e.changedTouches[0].clientY;
+    mouse.x = start.x;
+    mouse.y = start.y;
+  };
+
+  window.ontouchmove = (e) => touchMove(e);
+  window.ontouchstart = (e) => touchStart(e);
+  window.ontouchend = (e) => mouseUp(e);
+
+
+  /*----------------------------------------------------------
+  --------------------2-SETUP ON RESIZE----------------------
+  ----------------------------------------------------------*/
+  function setupCanvas() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+    herocanvas.width = w;
+    herocanvas.height = h;
+    gridFontSize = parseInt(getComputedStyle(textContent).fontSize, 10);
+
+    //1.Initialize particles
+
+    //b. instanciate and populate the particles
+    particles = [];
+    for (let n = 0; n < num; n++) {
+      
+      let randomPosition = vec(
+        0.2 * w + 0.6 * Math.random() * w,
+        0.2 * h + 0.6 * Math.random() * h,
+        0
+      );
+
+      let newParticle = createParticle({
+        index: n,
+        position: randomPosition,
+        direction: vec().random2D(1),
+        initialVelocity: vec().random2D(1),
+        behaviours: [boids],
+      });
+      particles.push(newParticle);
+    }
+  }
+
+  /*----------------------------------------------------------
+  --------------------3-FUNCTIONS FOR LOOP--------------------
+  ----------------------------------------------------------*/
+  let update = () => {
+    for (let i = 0; i < num; i++) {
+      let thisParticle = particles[i];
+      let tooClose = particles.filter(
+        (particle) =>
+          vec()
+            .copy(particle.position)
+            .distanceToSquared(thisParticle.position) < safeRadius
+      );
+      let agents = particles.filter((x: any) => !tooClose.includes(x));
+      particles[i].applyForces(agents);
+
+      if(isDragging) {
+        let Rpanic = vec().copy(particles[i].position).sub(vec(mouse.x, mouse.y));
+        let Fpanic = vec().copy(Rpanic).setMag(100000000).div(Rpanic.magSquared()).mult(-1);
+        particles[i].acl.add(Fpanic.div(particles[i].inertialMass));
+
+      } else {
+
+      }
+    }
+  };
+
+  let move = () => {
+    for (let i = 0; i < num; i++) {
+      if(isDragging) { 
+        particles[i].move(2.2, 0.01); 
+      } else {
+        particles[i].move(); 
+      }
+      if(particles[i].position.x > w) particles[i].position.x = 1;
+      if(particles[i].position.x < 0) particles[i].position.x = w-1;
+      if(particles[i].position.y > h) particles[i].position.y = 1;
+      if(particles[i].position.y < 0) particles[i].position.y = h-1;
+
+    }
+  };
+
+  let show = () => {
+    particles.forEach((particle) => {
+      let speedStretchFactor = 1 + particle.vel.magSquared()/10;
+      let v1=vec(1,0,0).setMag(gridFontSize*speedStretchFactor);
+      let rotationCorrection = v1.angleBetween(particle.vel);
+      v1.rotate(rotationCorrection);
+      let v2 = v1.clone().rotate(Math.PI/3).setMag(gridFontSize/2);
+      let v3 = v1.clone().rotate(-Math.PI/3).setMag(gridFontSize/2);
+      v1.add(particle.position);
+      v2.add(particle.position);
+      v3.add(particle.position);
+      rc.polygon([
+        [v1.x, v1.y],
+        [v2.x, v2.y],
+        [v3.x, v3.y]
+      ], {stroke: textColor});
+    });
+  };
+
+  /*----------------------------------------------------------
+  ---------------------4-DRAW LOOP----------------------------
+  ----------------------------------------------------------*/
+  let t = 0;
+
+  function animate() {
+    if (t > 1024) t = 0;
+    requestAnimationFrame(animate);
+
+    if (
+      herocanvas.width != window.innerWidth ||
+      herocanvas.height != window.innerHeight
+    ) {
+      setupCanvas();
+    }
+
+    ctx.clearRect(0, 0, herocanvas.width, herocanvas.height);
+    update();
+    move();
+    //grid.show(rc); //test & fun
+
+    show();
+    t++;
+  }
+  animate();
+</script>
+
+<style>
+  #background-vfx {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2rem;
+    color: var(--pallete4c);
+    display: inline-block;
+  }
+
+  #background-vfx::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 10rem 8rem rgba(0,0,0,1);
+  }
+
+  @media (max-width: 1024px) {
+    #background-vfx {
+      font-size: 0.5rem;
+    }
+  }
+
+  #hero-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -10;
+    background-color: var(--pallete4a);
+    color: var(--pallete4c);
+  }
+</style>

@@ -80,14 +80,14 @@ export type Tparticle = {
   rotationDamping: number;
   physics: { [name: string]: Tbehaviour };
   applyForces: (agents: Tparticle[]) => void;
-  move: () => void;
+  move: (maxSpeed?: number, maxForce?: number, maxAngVel?:number, maxTorque?:number) => void;
   x: number;
   y: number;
   z: number;
-  show: (
+  showAsBox: (
     canvasContext: RoughCanvas,
     particleSize: { x: number; y: number },
-    magnetColor: string
+    color: string
   ) => void;
 };
 
