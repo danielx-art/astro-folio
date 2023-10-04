@@ -60,7 +60,12 @@ export default function createParticle({
         physics[phenom].forces(agents, self);
       });
     },
-    move: function (customMaxSpeed, customMaxForce, customMaxAngVel, customMaxTorque) {
+    move: function (
+      customMaxSpeed,
+      customMaxForce,
+      customMaxAngVel,
+      customMaxTorque
+    ) {
       //console.log("acl:", acl); //debugg
       acl.limit((customMaxForce || maxForce) / inertialMass);
       //console.log("acl:", acl); //debugg
@@ -68,7 +73,8 @@ export default function createParticle({
       //console.log("vel:", vel); //debugg
       vel.mult(translationDamping);
       //console.log("vel:", vel); //debugg
-      vel.limit(customMaxSpeed || maxSpeed);
+      if (vel.mag() > (customMaxSpeed || maxSpeed)) vel.mult(0.99);
+      //vel.limit(customMaxSpeed || maxSpeed);
       //console.log("vel:", vel); //debugg
 
       position.add(vel);
@@ -78,7 +84,7 @@ export default function createParticle({
       angacl.limit((customMaxTorque || maxTorque) / momentInertia);
       angvel.add(angacl);
       angvel.mult(rotationDamping);
-      angvel.limit(customMaxAngVel|| maxAngVel);
+      angvel.limit(customMaxAngVel || maxAngVel);
       let deltadir = angvel.cross(direction);
       direction.add(deltadir).setMag(1);
       angacl.mult(0);

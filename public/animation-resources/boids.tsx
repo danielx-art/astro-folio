@@ -3,12 +3,11 @@ import type { Tbehaviour, Tparticle } from "./types";
 import { vec } from "./vetores";
 
 export default function boids(): Tbehaviour {
-
-  let intensity = [0.001, 100, 0.001, (2 * Math.PI)/3, 0.0001];
+  let intensity = [0.001, 100, 0.01, (2 * Math.PI) / 3, 0.0001];
 
   let field = (pointInSpace: vector, from: Tparticle[]) => {
-    return vec()
-  }
+    return vec();
+  };
 
   let forces = (agents: Tparticle[], particle: Tparticle) => {
     let Fres = vec();
@@ -22,10 +21,9 @@ export default function boids(): Tbehaviour {
     let fov = intensity[3];
     let NoiseFactor = intensity[4];
 
-    if(!(agents.length > 0)) return;
+    if (!(agents.length > 0)) return;
 
     agents.forEach(function (agent, i) {
-
       let viewDir = dir.angleBetween(vec().copy(agent.position).sub(pos));
       let fovFactor = Math.exp(-(viewDir * viewDir) / (fov * fov));
       //let fovFactor = viewDir < fov ? 1 : 0.1;
@@ -33,10 +31,7 @@ export default function boids(): Tbehaviour {
       let r2 = r.magSquared();
 
       //cohesion - part 1
-      rcm.add(
-        vec()
-          .copy(agent.position).mult(fovFactor)
-      );
+      rcm.add(vec().copy(agent.position).mult(fovFactor));
 
       sumWeights += fovFactor;
 
@@ -53,11 +48,19 @@ export default function boids(): Tbehaviour {
 
       //ruido
       //let noise = vec().random2D(1).mult(NoiseFactor);
-      let noiseTemp = Math.sin((particle.vel.heading()*(1+0.1+0.01+0.001) / Math.PI)**2);
-      let noise = vec().copy(particle.vel).rotate(noiseTemp*Math.PI/3).mult(NoiseFactor);
+      let noiseTemp = Math.sin(
+        ((particle.vel.heading() * (1 + 0.1 + 0.01 + 0.001)) / Math.PI) ** 2
+      );
+      let noise = vec()
+        .copy(particle.vel)
+        .rotate((noiseTemp * Math.PI) / 3)
+        .mult(NoiseFactor);
       Fres.add(noise);
 
       //visão limpa
+
+      //aceleração repentina - somente esse repositório - como uma velocidade mínima
+      if (particle.vel.magSquared() < 2) Fres.add(vec().copy(dir).setMag(0.01));
     });
 
     //cohesion - part 2
@@ -66,11 +69,9 @@ export default function boids(): Tbehaviour {
     Fres.add(fc);
 
     particle.acl.add(Fres.div(particle.inertialMass));
-  }
-
-  let hasMoved = (particle: Tparticle) => {
-
   };
+
+  let hasMoved = (particle: Tparticle) => {};
 
   return {
     name: "boids",

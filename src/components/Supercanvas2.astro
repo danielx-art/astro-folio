@@ -8,28 +8,31 @@ export interface Props {}
 
 <script>
   import rough from "roughjs";
-  import { vec, vector } from "../../public/animation-resources/vetores";
+  import { vec } from "../../public/animation-resources/vetores";
   import createParticle from "../../public/animation-resources/particle";
-  import boids from "../../public/animation-resources/boids"
+  import boids from "../../public/animation-resources/boids";
   import type { Tparticle } from "../../public/animation-resources/types";
+  import {
+    transformRGBtoRGBA,
+    lerpStretchClamp,
+  } from "../../public/animation-resources/helpers";
 
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
   ----------------------------------------------------------*/
   const textContent = document.querySelector("#background-vfx") as HTMLElement;
-  const heroCanvas = document.querySelector("#hero-canvas") as HTMLElement;
-  const magnet1 = document.querySelector("#magnet1") as HTMLDivElement;
-  const magnet2 = document.querySelector("#magnet2") as HTMLDivElement;
   const herocanvas = document.getElementById(
     "hero-canvas"
   ) as HTMLCanvasElement;
+  const listButtons = document.getElementsByTagName("a");
 
   /*----------------------------------------------------------
   --------------------1-GLOBAL VARIABLES----------------------
   ----------------------------------------------------------*/
   let isDragging = false;
+  let isOnbutton = false;
   const textColor = getComputedStyle(textContent).color;
-  const heroColor = getComputedStyle(heroCanvas).color;
+  const heroColor = getComputedStyle(herocanvas).color;
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize: number;
   const num = 15;
@@ -38,11 +41,21 @@ export interface Props {}
   let h = window.innerHeight;
   const safeRadius = 5;
   let rc = rough.canvas(herocanvas);
+  let normalMaxSpeed = 2;
+  let normalMaxForce = 0.001;
+  let increasedSpeed = 4;
+  let increasedForce = 0.01;
 
   let mouse = { x: 0, y: 0 };
   let start = { x: 0, y: 0 };
 
   let mouseMove = function (e: MouseEvent) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  };
+
+  let mouseOverbutton = function (e: MouseEvent) {
+    isOnbutton = true;
     mouse.x = e.x;
     mouse.y = e.y;
   };
@@ -70,7 +83,6 @@ export interface Props {}
     mouse.y = e.changedTouches[0].clientY;
 
     if (isDragging) {
-
     }
   };
 
@@ -83,10 +95,12 @@ export interface Props {}
     mouse.y = start.y;
   };
 
-  window.ontouchmove = (e) => touchMove(e);
-  window.ontouchstart = (e) => touchStart(e);
-  window.ontouchend = (e) => mouseUp(e);
+  herocanvas.ontouchmove = (e) => touchMove(e);
+  herocanvas.ontouchstart = (e) => touchStart(e);
+  herocanvas.ontouchend = (e) => mouseUp(e);
 
+  listButtons[1].onmouseover = mouseOverbutton;
+  listButtons[1].onmouseleave = () => (isOnbutton = false);
 
   /*----------------------------------------------------------
   --------------------2-SETUP ON RESIZE----------------------
@@ -103,7 +117,6 @@ export interface Props {}
     //b. instanciate and populate the particles
     particles = [];
     for (let n = 0; n < num; n++) {
-      
       let randomPosition = vec(
         0.2 * w + 0.6 * Math.random() * w,
         0.2 * h + 0.6 * Math.random() * h,
@@ -136,49 +149,86 @@ export interface Props {}
       let agents = particles.filter((x: any) => !tooClose.includes(x));
       particles[i].applyForces(agents);
 
-      if(isDragging) {
-        let Rpanic = vec().copy(particles[i].position).sub(vec(mouse.x, mouse.y));
-        let Fpanic = vec().copy(Rpanic).setMag(100000000).div(Rpanic.magSquared()).mult(-1);
+      if (isDragging) {
+        let Rpanic = vec()
+          .copy(particles[i].position)
+          .sub(vec(mouse.x, mouse.y));
+        let Fpanic = vec()
+          .copy(Rpanic)
+          .setMag(100000000)
+          .div(Rpanic.magSquared())
+          .mult(-1);
         particles[i].acl.add(Fpanic.div(particles[i].inertialMass));
-
       } else {
-
       }
     }
   };
 
   let move = () => {
     for (let i = 0; i < num; i++) {
-      if(isDragging) { 
-        particles[i].move(2.2, 0.01); 
+      if (isDragging || isOnbutton) {
+        particles[i].move(increasedSpeed, increasedForce);
       } else {
-        particles[i].move(); 
+        particles[i].move(normalMaxSpeed, normalMaxForce);
       }
-      if(particles[i].position.x > w) particles[i].position.x = 1;
-      if(particles[i].position.x < 0) particles[i].position.x = w-1;
-      if(particles[i].position.y > h) particles[i].position.y = 1;
-      if(particles[i].position.y < 0) particles[i].position.y = h-1;
-
+      if (particles[i].position.x > w) particles[i].position.x = 1;
+      if (particles[i].position.x < 0) particles[i].position.x = w - 1;
+      if (particles[i].position.y > h) particles[i].position.y = 1;
+      if (particles[i].position.y < 0) particles[i].position.y = h - 1;
     }
   };
 
   let show = () => {
+    let scl = Math.min(w / 100, gridFontSize);
+
     particles.forEach((particle) => {
-      let speedStretchFactor = 1 + particle.vel.magSquared()/10;
-      let v1=vec(1,0,0).setMag(gridFontSize*speedStretchFactor);
+      //calcula os vertices do triangulo
+      let speedStretchFactor = 1 + particle.vel.magSquared() / 10;
+      let v1 = vec(1, 0, 0).setMag(scl * speedStretchFactor);
       let rotationCorrection = v1.angleBetween(particle.vel);
       v1.rotate(rotationCorrection);
-      let v2 = v1.clone().rotate(Math.PI/3).setMag(gridFontSize/2);
-      let v3 = v1.clone().rotate(-Math.PI/3).setMag(gridFontSize/2);
+      let v2 = v1
+        .clone()
+        .rotate(Math.PI / 3)
+        .setMag(scl / 2);
+      let v3 = v1
+        .clone()
+        .rotate(-Math.PI / 3)
+        .setMag(scl / 2);
       v1.add(particle.position);
       v2.add(particle.position);
       v3.add(particle.position);
-      rc.polygon([
-        [v1.x, v1.y],
-        [v2.x, v2.y],
-        [v3.x, v3.y]
-      ], {stroke: textColor});
+
+      //calcula a cor baseado em textColor
+      let distFromEdges =
+        1 / (vec().copy(particle.position).x ** 2 + 0.01) +
+        1 / ((w - vec().copy(particle.position).x) ** 2 + 0.01) +
+        1 / (vec().copy(particle.position).y ** 2 + 0.01) +
+        1 / ((h - vec().copy(particle.position).y) ** 2 + 0.01);
+      let alpha = lerpStretchClamp(distFromEdges, 0, 0.0003, 1, 0);
+      let customColorCalm = transformRGBtoRGBA("rgb(100,100,100)", alpha);
+      let customColorDrag = transformRGBtoRGBA(heroColor, alpha);
+      let customColorAccent = transformRGBtoRGBA(textColor, alpha);
+
+      rc.polygon(
+        [
+          [v1.x, v1.y],
+          [v2.x, v2.y],
+          [v3.x, v3.y],
+        ],
+        {
+          //stroke: isDragging ? "rgb(255,0,0)" : "none",
+          stroke: isDragging
+            ? "none"
+            : isOnbutton
+            ? customColorAccent
+            : customColorCalm,
+          fill: isDragging ? transformRGBtoRGBA(heroColor, alpha) : "none",
+          fillStyle: "solid",
+        }
+      );
     });
+    //console.log(textColor); //debugg
   };
 
   /*----------------------------------------------------------
@@ -224,14 +274,6 @@ export interface Props {}
     display: inline-block;
   }
 
-  #background-vfx::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 0 0 10rem 8rem rgba(0,0,0,1);
-  }
-
   @media (max-width: 1024px) {
     #background-vfx {
       font-size: 0.5rem;
@@ -246,6 +288,6 @@ export interface Props {}
     left: 0;
     z-index: -10;
     background-color: var(--pallete4a);
-    color: var(--pallete4c);
+    color: var(--pallete4b);
   }
 </style>
