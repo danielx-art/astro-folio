@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import { Footer } from "../../components/Footer";
 import type { langData } from "../../components/Hero";
 import { ProjectsPage } from "../../components/ProjectsPage";
@@ -24,7 +25,9 @@ const projects = await getCollection("projects", ({id})=>{
 
 const basePath = Astro.url.origin + "/astro-folio";
 ---
-
+<head>
+  <ViewTransitions />
+</head>
 <Layout title="Daniel Folio" lang={lang}>
   <div class="bg-pallete4a min-h-full text-center text-white pt-4 pb-8">
     <!-- <h1
