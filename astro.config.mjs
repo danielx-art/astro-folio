@@ -10,5 +10,8 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   site: "https://danielx-art.github.io",
   base: "/astro-folio",
-  integrations: [react(), tailwind()]
+  integrations: [react(), tailwind()],
+  redirects: {
+    '/': '/br'
+  }
 });
