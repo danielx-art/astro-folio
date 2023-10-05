@@ -12,7 +12,7 @@ lerpStretchClamp,
 /*----------------------------------------------------------
 --------------------0-GET DOM ELEMENTS----------------------
 ----------------------------------------------------------*/
-const textContent = document.querySelector("#background-vfx") as HTMLElement;
+const textContent = document.querySelector("#canvas-container") as HTMLElement;
 const herocanvas = document.getElementById(
 "hero-canvas"
 ) as HTMLCanvasElement;

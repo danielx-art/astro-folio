@@ -2,7 +2,7 @@
 export interface Props {}
 ---
 
-<div id="background-vfx">
+<div id="canvas-container">
   <div id="magnet1"></div>
   <div id="magnet2"></div>
   <canvas id="hero-canvas"> </canvas>
@@ -25,7 +25,7 @@ export interface Props {}
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
   ----------------------------------------------------------*/
-  const textContent = document.querySelector("#background-vfx") as HTMLElement;
+  const textContent = document.querySelector("#canvas-container") as HTMLElement;
   const heroCanvas = document.querySelector("#hero-canvas") as HTMLElement;
   const magnet1 = document.querySelector("#magnet1") as HTMLDivElement;
   const magnet2 = document.querySelector("#magnet2") as HTMLDivElement;
@@ -306,7 +306,7 @@ export interface Props {}
 </script>
 
 <style>
-  #background-vfx {
+  #canvas-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -321,7 +321,7 @@ export interface Props {}
   }
 
   @media (max-width: 1024px) {
-    #background-vfx {
+    #canvas-container {
       font-size: 1rem;
     }
   }

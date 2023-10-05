@@ -2,7 +2,7 @@
 export interface Props {}
 ---
 
-<div id="background-vfx">
+<div id="canvas-container">
   <canvas id="hero-canvas"> </canvas>
 </div>
 
@@ -20,7 +20,7 @@ export interface Props {}
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
   ----------------------------------------------------------*/
-  const textContent = document.querySelector("#background-vfx") as HTMLElement;
+  const textContent = document.querySelector("#canvas-container") as HTMLElement;
   const herocanvas = document.getElementById(
     "hero-canvas"
   ) as HTMLCanvasElement;
@@ -95,9 +95,9 @@ export interface Props {}
     mouse.y = start.y;
   };
 
-  herocanvas.ontouchmove = (e) => touchMove(e);
-  herocanvas.ontouchstart = (e) => touchStart(e);
-  herocanvas.ontouchend = (e) => mouseUp(e);
+  window.ontouchmove = (e) => touchMove(e);
+  window.ontouchstart = (e) => touchStart(e);
+  window.ontouchend = (e) => mouseUp(e);
 
   listButtons[1].onmouseover = mouseOverbutton;
   listButtons[1].onmouseleave = () => (isOnbutton = false);
@@ -259,11 +259,15 @@ export interface Props {}
     show();
     t++;
   }
+  
   animate();
+
+  //document.addEventListener('astro:after-swap', animate);
+
 </script>
 
 <style>
-  #background-vfx {
+  #canvas-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -279,7 +283,7 @@ export interface Props {}
   }
 
   @media (max-width: 1024px) {
-    #background-vfx {
+    #canvas-container {
       font-size: 0.5rem;
     }
   }
@@ -291,7 +295,7 @@ export interface Props {}
     top: 0;
     left: 0;
     z-index: -10;
-    background-color: var(--pallete4a);
+    /*background-color: var(--pallete4a);*/
     color: var(--pallete4b);
   }
 </style>
