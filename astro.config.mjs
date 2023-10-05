@@ -12,6 +12,6 @@ export default defineConfig({
   base: "/astro-folio",
   integrations: [react(), tailwind()],
   redirects: {
-    '/': '/br'
+    '/': '/br/'
   }
 });
