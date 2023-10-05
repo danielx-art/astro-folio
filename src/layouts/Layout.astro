@@ -19,7 +19,7 @@ subPaths.splice(0, 1);
 let basePath = Astro.url.origin + "/astro-folio";
 let homePath = lang == "br" ? basePath + "/br/" : basePath + "/en/";
 const areWeHome = pathname == homePath || pathname == basePath || pathname == basePath +"/";
-console.log("Debugg:\n homePath: "+homePath+"\n"+"pathname: "+pathname+"\n"+"basePath with slash: "+basePath+"/"); //debugg
+console.log("Debugg:\n homePath: "+homePath+"\n"+" pathname: "+pathname+"\n"+" basePath with slash: "+basePath+"/"+"\n areWeHome: "+areWeHome); //debugg
 
 let changeLangPath = lang == "br" ? basePath + "/en/" : basePath + "/br/";
 
