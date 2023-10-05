@@ -61,7 +61,7 @@ export interface Props {}
   };
 
   let mouseDown = function (e: MouseEvent) {
-    e.preventDefault;
+    e.preventDefault();
     start.x = e.x;
     start.y = e.y;
     mouse.x = e.x;
@@ -87,7 +87,7 @@ export interface Props {}
   };
 
   let touchStart = function (e: TouchEvent) {
-    e.preventDefault;
+    e.preventDefault();
     isDragging = true;
     start.x = e.changedTouches[0].clientX;
     start.y = e.changedTouches[0].clientY;
