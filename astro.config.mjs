@@ -11,7 +11,4 @@ export default defineConfig({
   site: "https://danielx-art.github.io",
   base: "/astro-folio",
   integrations: [react(), tailwind()],
-  redirects: {
-    '/astro-folio/': '/astro-folio/br/'
-  }
 });
