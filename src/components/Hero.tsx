@@ -32,7 +32,7 @@ export const Hero: React.FC<{ lang: string; basePath: string }> = ({
         </div>
         <div className="flex flex-row flex-wrap my-4 gap-4 justify-center text-lg font-fira mx-auto select-none">
           <a
-            className="text-xl flex flex-col justify-center items-center select-none hover:select-none text-white hover:text-pallete4c outline-2 outline-dashed outline-white hover:outline-2 hover:outline-pallete4c shadow-none cursor-pointer min-w-max px-20 py-16 rounded-full"
+            className="text-xl flex flex-col justify-center items-center select-none hover:select-none text-white hover:text-pallete4c outline-2 outline-dashed outline-white hover:outline-2 hover:outline-pallete4c shadow-none cursor-pointer min-w-max px-8 py-8 sm:px-20 sm:py-12 rounded-full"
             href={`${basePath}/${lang}/projects`}
           >
             {/* <div className="text-8xl">
