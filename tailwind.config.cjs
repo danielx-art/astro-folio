@@ -43,7 +43,7 @@ module.exports = {
         zinzout: 'zinzout 800ms ease-in-out',
       },
       backgroundImage: {
-        texture: "url('https://i.ibb.co/FhfBXMD/static.jpg')"
+        'texture': "url('https://i.ibb.co/FhfBXMD/static.jpg')",
       }
     },
   },
