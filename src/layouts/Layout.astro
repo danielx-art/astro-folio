@@ -34,7 +34,7 @@ import {ViewTransitions} from 'astro:transitions';
 <html lang={lang}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -172,8 +172,9 @@ import {ViewTransitions} from 'astro:transitions';
       .background-vfx {
         position: fixed;
         top: 0;
-        width: 100%;
-        height: 100%;
+        right:0;
+        left: 0;
+        bottom: 0;
         opacity: 0.3;
         background-blend-mode: lighten;
         user-select:none;
@@ -186,8 +187,9 @@ import {ViewTransitions} from 'astro:transitions';
         content: '';
         position: fixed;
         top: 0;
-        width: 100%;
-        height: 100%;
+        right:0;
+        left: 0;
+        bottom: 0;
         /*background: url("../../../public/animation-resources/static-noise.jpg") repeat center;*/
         background: url("https://i.ibb.co/FhfBXMD/static.jpg") repeat center;
         mix-blend-mode: overlay;
