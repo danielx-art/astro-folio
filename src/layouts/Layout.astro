@@ -75,7 +75,6 @@ import {ViewTransitions} from 'astro:transitions';
       </a>
     </nav>
     <slot />
-    <div class="background-vfx"></div>
 
     <style is:global>
       * {
@@ -167,41 +166,6 @@ import {ViewTransitions} from 'astro:transitions';
       code {
         font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
           DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-      }
-
-      .background-vfx {
-        position: fixed;
-        top: 0;
-        right:0;
-        left: 0;
-        bottom: 0;
-        height: 100dvh;
-        min-height: 100%;
-        opacity: 0.3;
-        background-blend-mode: lighten;
-        user-select:none;
-        background-image: linear-gradient(to bottom right, #c72e31, rgb(199 46 49 / 0));
-        background-attachment: fixed;
-        z-index:-1;
-        user-select:none;
-      }
-      
-      .background-vfx::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        right:0;
-        left: 0;
-        bottom: 0;
-        height: 100dvh;
-        min-height: 100%;
-        /*background: url("../../../public/animation-resources/static-noise.jpg") repeat center;*/
-        background: url("https://i.ibb.co/FhfBXMD/static.jpg") repeat center;
-        background-attachment: fixed;
-        mix-blend-mode: overlay;
-        opacity: 0.3;
-        z-index: -1;
-        user-select: none;
       }
     </style>
   </body>

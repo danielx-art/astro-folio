@@ -22,8 +22,42 @@ const basePath = Astro.url.origin + "/astro-folio";
       class="absolute w-full h-full opacity-30 bg-blend-lighten select-none bg-gradient-to-br from-pallete4b to-black-80"
     >
     </div> -->
+    <div class="background-vfx"></div>
   </div>
   <style>
+    .background-vfx {
+      position: fixed;
+      top: 0;
+      right:0;
+      left: 0;
+      bottom: 0;
+      height: 100dvh;
+      min-height: 100%;
+      opacity: 0.3;
+      background-blend-mode: lighten;
+      user-select:none;
+      background-image: linear-gradient(to bottom right, #c72e31, rgb(199 46 49 / 0));
+      background-attachment: fixed;
+      z-index:-1;
+      user-select:none;
+    }
     
+    .background-vfx::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      right:0;
+      left: 0;
+      bottom: 0;
+      height: 100dvh;
+      min-height: 100%;
+      /*background: url("../../../public/animation-resources/static-noise.jpg") repeat center;*/
+      background: url("https://i.ibb.co/FhfBXMD/static.jpg") repeat center;
+      background-attachment: fixed;
+      mix-blend-mode: overlay;
+      opacity: 0.3;
+      z-index: -1;
+      user-select: none;
+    }
   </style>
 </Layout>
