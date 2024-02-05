@@ -4,8 +4,8 @@ import { ProjectTechs } from "../components/ProjectTechs";
 
 export type TProjectsPage = {
   basePath: string;
-  content: CollectionEntry<"projects">[] ;
-}
+  content: CollectionEntry<"projects">[];
+};
 
 export const ProjectsPage: React.FC<TProjectsPage> = ({
   basePath,
@@ -17,7 +17,7 @@ export const ProjectsPage: React.FC<TProjectsPage> = ({
         {content.map((project, index) => {
           return (
             <div
-              key={project.id}
+              key={`${project.id} ${index}`}
               className="w-4/5 mx-auto sm:max-w-md flex flex-nowrap flex-col justify-center items-center sm:bg-transparent bg-[rgba(255,255,255,0.02)] my-4 pb-8 rounded-lg"
             >
               <div className="relative mb-4 mx-auto sm:max-w-sm outline-double outline-1 outline-pallete4c rounded-lg overflow-hidden">

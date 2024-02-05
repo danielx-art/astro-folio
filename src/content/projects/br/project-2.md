@@ -1,18 +1,17 @@
 ---
 draft: false
 
-title:
-  Busca Personagens Rick e Morty
+title: GeoSimples
 
-description:
-  Um mural com filtros personalizados de pesquisa de personagens da série Rick e Morty.
+description: Ferramenta para criação de imagens simple e padronizadas de figuras geométricas, voltada principalmente para criação de conteúdo educativo.
 
 techs:
   - React
   - Next
   - Typescript
-  - Tanstack Query
+  - Tailwind
+  - Zustand
 
-link: https://ricknmortychallenge.vercel.app/
-github: https://github.com/danielx-art/ricknmortychallenge
+link: https://geosimples.vercel.app/
+github: https://github.com/danielx-art/tikzgenerator
 ---
