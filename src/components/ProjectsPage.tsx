@@ -12,15 +12,15 @@ export const ProjectsPage: React.FC<TProjectsPage> = ({
   content,
 }) => {
   return (
-    <div className="bg-pallete4a w-full min-h-full sm:p-4 text-white sm:mt-12">
+    <div className="w-full min-h-full sm:p-4 text-white sm:mt-4">
       <div className="flex flex-wrap gap-4 items-center sm:px-[10%]">
         {content.map((project, index) => {
           return (
             <div
               key={`${project.id} ${index}`}
-              className="w-4/5 mx-auto sm:max-w-md flex flex-nowrap flex-col justify-center items-center sm:bg-transparent bg-[rgba(255,255,255,0.02)] my-4 pb-8 rounded-lg"
+              className="w-4/5 mx-auto sm:max-w-md flex flex-nowrap flex-col justify-center items-center bg-[rgba(255,255,255,0.02)] my-4 pb-8 rounded-lg"
             >
-              <div className="relative mb-4 mx-auto sm:max-w-sm outline-double outline-1 outline-pallete4c rounded-lg overflow-hidden">
+              <div className="relative mb-4 mx-auto outline-double outline-1 outline-pallete4c rounded-lg overflow-hidden">
                 <a href={project.data.link ? project.data.link : undefined}>
                   <img
                     src={`${basePath}/projects/thumbs/${index + 1}.png`}

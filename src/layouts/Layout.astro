@@ -19,20 +19,22 @@ subPaths.splice(0, 1);
 let basePath = Astro.url.origin + "/astro-folio";
 let homePath = lang == "br" ? basePath + "/br/" : basePath + "/en/";
 const areWeHome = pathname == homePath || pathname == basePath || pathname == basePath +"/";
-console.log("Debugg:\n homePath: "+homePath+"\n"+" pathname: "+pathname+"\n"+" basePath with slash: "+basePath+"/"+"\n areWeHome: "+areWeHome); //debugg
+//console.log("Debugg:\n homePath: "+homePath+"\n"+" pathname: "+pathname+"\n"+" basePath with slash: "+basePath+"/"+"\n areWeHome: "+areWeHome); //debugg
 
 let changeLangPath = lang == "br" ? basePath + "/en/" : basePath + "/br/";
 
 for (let i = 2; i < subPaths.length; i++) {
   changeLangPath += subPaths[i] + "/";
 }
+
+import {ViewTransitions} from 'astro:transitions';
 ---
 
 <!DOCTYPE html>
 <html lang={lang}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,6 +44,7 @@ for (let i = 2; i < subPaths.length; i++) {
     />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <ViewTransitions />
   </head>
   <body>
     <nav class="nav_menu">
@@ -72,6 +75,7 @@ for (let i = 2; i < subPaths.length; i++) {
       </a>
     </nav>
     <slot />
+
     <style is:global>
       * {
         overscroll-behavior: contain;
@@ -156,6 +160,7 @@ for (let i = 2; i < subPaths.length; i++) {
         min-height: 100%;
         height: 100%;
         overflow-y: auto;
+        background-color: var(--pallete4a);
       }
 
       code {
