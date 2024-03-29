@@ -2,7 +2,7 @@
 export interface Props {}
 ---
 
-<div id="canvas-container">
+<div id="canvas-container" class="fixed -z-10 top-0 left-0 m-0 p-0 box-border overflow-hidden inline-block sm:text-lg text-xs w-full h-full">
   <canvas id="hero-canvas"> </canvas>
 </div>
 
@@ -17,6 +17,8 @@ export interface Props {}
     lerpStretchClamp,
   } from "../../public/animation-resources/helpers";
 
+  document.addEventListener('astro:page-load', ()=>{
+    
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
   ----------------------------------------------------------*/
@@ -262,12 +264,14 @@ export interface Props {}
   
   animate();
 
+  })
+
   //document.addEventListener('astro:after-swap', animate);
 
 </script>
 
 <style>
-  #canvas-container {
+  /* #canvas-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -280,7 +284,8 @@ export interface Props {}
     font-size: 1.2rem;
     color: var(--pallete4c);
     display: inline-block;
-  }
+    border: 2px solid white;
+  } */
 
   @media (max-width: 1024px) {
     #canvas-container {

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
-export const SocialMediaBar: React.FC = () => {
+export const SocialMediaNav: React.FC = () => {
   return (
-    <div className="flex flex-row mx-auto mt-auto mb-8">
+    <div className="">
       <SocialMediaIcon link="https://github.com/danielx-art">
         <svg
           xmlns="http://www.w3.org/2000/svg"
