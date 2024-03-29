@@ -12,7 +12,7 @@ export const ProjectsPage: React.FC<TProjectsPage> = ({
   content,
 }) => {
   return (
-    <div className="w-full min-h-full sm:p-4 text-white sm:pt-8 sm:m-0 bg-gradient-to-b from-[rgba(0,0,0,0.6)] to-[rgba(0,0,0,0)]">
+    <div className="w-full min-h-full h-fit sm:p-4 text-white sm:pt-8 sm:m-0 bg-gradient-to-b from-[rgba(0,0,0,0.6)] to-[rgba(0,0,0,0)]">
       <div className="flex flex-wrap gap-4 items-center sm:px-[10%]">
         {content.map((project, index) => {
           return (

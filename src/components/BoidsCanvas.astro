@@ -2,7 +2,7 @@
 export interface Props {}
 ---
 
-<div id="canvas-container" class="fixed -z-10 top-0 left-0 m-0 p-0 box-border overflow-hidden inline-block sm:text-lg text-xs w-full h-full">
+<div id="canvas-container" class="absolute -z-10 top-0 left-0 m-0 p-0 box-border overflow-hidden inline-block sm:text-lg text-xs w-full h-full">
   <canvas id="hero-canvas"> </canvas>
 </div>
 
@@ -22,7 +22,7 @@ export interface Props {}
   /*----------------------------------------------------------
   --------------------0-GET DOM ELEMENTS----------------------
   ----------------------------------------------------------*/
-  const textContent = document.querySelector("#canvas-container") as HTMLElement;
+  const canvasContainer = document.querySelector("#canvas-container") as HTMLElement;
   const herocanvas = document.getElementById(
     "hero-canvas"
   ) as HTMLCanvasElement;
@@ -33,7 +33,7 @@ export interface Props {}
   ----------------------------------------------------------*/
   let isDragging = false;
   let isOnbutton = false;
-  const textColor = getComputedStyle(textContent).color;
+  const textColor = getComputedStyle(canvasContainer).color;
   const heroColor = getComputedStyle(herocanvas).color;
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize: number;
@@ -52,22 +52,22 @@ export interface Props {}
   let start = { x: 0, y: 0 };
 
   let mouseMove = function (e: MouseEvent) {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    mouse.x = e.pageX;
+    mouse.y = e.pageY;
   };
 
   let mouseOverbutton = function (e: MouseEvent) {
     isOnbutton = true;
-    mouse.x = e.x;
-    mouse.y = e.y;
+    mouse.x = e.pageX;
+    mouse.y = e.pageY;
   };
 
   let mouseDown = function (e: MouseEvent) {
     //e.preventDefault();
-    start.x = e.x;
-    start.y = e.y;
-    mouse.x = e.x;
-    mouse.y = e.y;
+    start.x = e.pageX;
+    start.y = e.pageY;
+    mouse.x = e.pageX;
+    mouse.y = e.pageY;
     isDragging = true;
   };
 
@@ -81,8 +81,8 @@ export interface Props {}
   window.onmouseup = (e) => mouseUp(e);
 
   let touchMove = function (e: TouchEvent) {
-    mouse.x = e.changedTouches[0].clientX;
-    mouse.y = e.changedTouches[0].clientY;
+    mouse.x = e.changedTouches[0].pageX;
+    mouse.y = e.changedTouches[0].pageY;
 
     if (isDragging) {
     }
@@ -91,8 +91,8 @@ export interface Props {}
   let touchStart = function (e: TouchEvent) {
     //e.preventDefault();
     isDragging = true;
-    start.x = e.changedTouches[0].clientX;
-    start.y = e.changedTouches[0].clientY;
+    start.x = e.changedTouches[0].pageX;
+    start.y = e.changedTouches[0].pageY;
     mouse.x = start.x;
     mouse.y = start.y;
   };
@@ -108,11 +108,14 @@ export interface Props {}
   --------------------2-SETUP ON RESIZE----------------------
   ----------------------------------------------------------*/
   function setupCanvas() {
+    w = herocanvas.width;
+    h = herocanvas.height;
+    console.log(w, h);
     w = window.innerWidth;
-    h = window.innerHeight;
+    h = canvasContainer.clientHeight;
     herocanvas.width = w;
     herocanvas.height = h;
-    gridFontSize = parseInt(getComputedStyle(textContent).fontSize, 10);
+    gridFontSize = parseInt(getComputedStyle(canvasContainer).fontSize, 10);
 
     //1.Initialize particles
 
@@ -120,8 +123,8 @@ export interface Props {}
     particles = [];
     for (let n = 0; n < num; n++) {
       let randomPosition = vec(
-        0.2 * w + 0.6 * Math.random() * w,
-        0.2 * h + 0.6 * Math.random() * h,
+        10 + Math.random() * (w-20),
+        10 + Math.random() * (h-20),
         0
       );
 
@@ -247,8 +250,7 @@ export interface Props {}
     requestAnimationFrame(animate);
 
     if (
-      herocanvas.width != window.innerWidth ||
-      herocanvas.height != window.innerHeight
+      herocanvas.width != window.innerWidth
     ) {
       setupCanvas();
     }

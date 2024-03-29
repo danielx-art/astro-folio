@@ -30,13 +30,13 @@ const basePath = Astro.url.origin + "/astro-folio";
   <ViewTransitions />
 </head> -->
 <Layout title="Daniel Folio" lang={lang}>
-  <div class="min-h-full text-center text-white sm:p-0 pt-8 pb-8 bg-blend-lighten bg-gradient-to-br from-[#c72e304e] to-[rgb(199 46 49 / 0)]">
+  <div class="relative min-h-full h-fit text-center text-white sm:p-0 pt-8 pb-8 bg-blend-lighten bg-gradient-to-br from-[#c72e304e] to-[rgb(199 46 49 / 0)]">
     <!-- <h1
       class="z-20 text-pallete4c opacity-10 sm:text-8xl -rotate-90 translate-x-[-40%] translate-y-[150%] sm:transform-none translate text-4xl uppercase fixed sm:-top-2 font-bold px-2 font-fira"
     >
       {title[lang]}
     </h1> -->
-    <div class="absolute w-full min-h-full bg-texture top-0 right-0 left-0 bottom-0 bg-repeat bg-center opacity-[0.05] mix-blend-overlay invisible sm:visible sm:fixed select-none pointer-events-none"></div>
+    <div class="absolute w-full h-full min-h-full bg-texture top-0 right-0 left-0 bottom-0 bg-repeat bg-center opacity-[0.05] mix-blend-overlay invisible sm:visible sm:fixed select-none pointer-events-none"></div>
     <ProjectsPage basePath={basePath} content={projects} />
     <Footer lang={lang} />
     <BoidsCanvas />
