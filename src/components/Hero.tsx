@@ -22,7 +22,7 @@ export const Hero: React.FC<{ lang: string; basePath: string }> = ({
 }) => {
   return (
     <>
-      <div className="w-full h-full absolute flex flex-col justify-center z-10 overflow-hidden sm:grid sm:grid-cols-2">
+      <div className="w-full h-screen absolute flex flex-col justify-center z-10 overflow-hidden sm:grid sm:grid-cols-2">
         <div className="flex flex-0 px-8 sm:self-center sm:-translate-y-[50%] sm:px-0 sm:pl-20">
           <div className="select-none text-black text-opacity-100 mx-auto text-lg font-fira flex flex-row flex-wrap justify-center sm:justify-end mt-auto sm:h-fit sm:pr-2">
             {text[lang][0].split(" ").map((word, index) => (

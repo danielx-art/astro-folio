@@ -3,7 +3,7 @@ import type { Tbehaviour, Tparticle } from "./types";
 import { vec } from "./vetores";
 
 export default function boids(): Tbehaviour {
-  let intensity = [0.001, 100, 0.01, (2 * Math.PI) / 3, 0.0001];
+  let intensity = [0.002, 100, 0.01, (2 * Math.PI) / 3, 0.0001];
 
   let field = (pointInSpace: vector, from: Tparticle[]) => {
     return vec();

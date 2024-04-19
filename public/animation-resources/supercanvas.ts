@@ -1,7 +1,7 @@
 import rough from "roughjs";
 import { vec } from "../../public/animation-resources/vetores";
 import createParticle from "../../public/animation-resources/particle";
-import boids from "../../public/animation-resources/boids";
+import boids from "./boids";
 import type { Tparticle } from "../../public/animation-resources/types";
 import {
 transformRGBtoRGBA,

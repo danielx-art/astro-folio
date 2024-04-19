@@ -18,7 +18,7 @@ export const ProjectsPage: React.FC<TProjectsPage> = ({
           return (
             <div
               key={`${project.id} ${index}`}
-              className="w-4/5 mx-auto md:max-w-full md:min-w-full lg:w-4/5 lg:min-w-0 flex flex-nowrap flex-col md:flex-row gap-0 md:gap-4 justify-evenly items-center bg-[rgba(255,255,255,0.02)] my-4 pb-8 md:p-2 rounded-lg overflow-visible"
+              className="w-4/5 mx-auto md:max-w-full md:min-w-full lg:w-4/5 lg:min-w-0 flex flex-nowrap flex-col md:flex-row gap-0 md:gap-4 justify-evenly items-center bg-[rgba(0,0,0,0.5)] my-4 pb-8 md:p-2 rounded-lg overflow-visible"
             >
               <div className="md:min-w-[30.33%] md:w-[33.33%] flex flex-col gap-4 md:flex-row md:flex-nowrap">
                 <div className="ring-2 ring-pallete4c rounded-lg overflow-hidden">
@@ -39,13 +39,13 @@ export const ProjectsPage: React.FC<TProjectsPage> = ({
                 </div>
               </div>
               <div className="mb-4 px-4 flex flex-col gap-4 flex-1">
-                <div className="my-4 text-2xl md:text-lg font-bold line-clamp-2 text-pallete4c md:self-start lg:self-center">
+                <div className="py-4  md:py-2 text-2xl md:text-lg font-bold line-clamp-2 text-pallete4c md:self-start lg:self-center">
                   {project.data.title}
                 </div>
-                <div className="text-md text-center md:text-start lg:text-center lg:w-fit lg:px-8 self-center">
+                <div className="text-md text-center md:text-start lg:text-center lg:w-fit lg:px-8 px-4 self-center">
                   {project.data.description}
                 </div>
-                <div className="self-center">
+                <div className="self-center md:py-4">
                   <ProjectTechs
                     techs={project.data.techs}
                     basePath={basePath}
