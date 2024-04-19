@@ -37,16 +37,16 @@ export interface Props {}
   const heroColor = getComputedStyle(herocanvas).color;
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize: number;
-  const num = 15;
+  const num = 100;
   let particles = [] as Tparticle[];
   let w = window.innerWidth;
   let h = window.innerHeight;
   const safeRadius = 5;
   let rc = rough.canvas(herocanvas);
-  let normalMaxSpeed = 2;
+  let normalMaxSpeed = 10;
   let normalMaxForce = 0.001;
-  let increasedSpeed = 4;
-  let increasedForce = 0.01;
+  let increasedSpeed = 12;
+  let increasedForce = 0.002;
 
   let mouse = { x: 0, y: 0 };
   let start = { x: 0, y: 0 };
@@ -185,7 +185,7 @@ export interface Props {}
 
   let show = () => {
     //let scl = Math.min(Math.max(w,h) / 60, gridFontSize);
-    let scl = 12;
+    let scl = 6;
 
     particles.forEach((particle) => {
       //calcula os vertices do triangulo
