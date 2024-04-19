@@ -3,8 +3,8 @@ export const ProjectLinks: React.FC<{ link: string; githubLink: string }> = ({
   githubLink,
 }) => {
   return (
-    <div className="bg-pallete4a gap-1 border-pallete4a flex flex-row flex-nowrap border-4 rounded-full overflow-hidden">
-      <div className=" bg-pallete4c sm:py-2 py-2 pl-3 pr-2   hover:scale-105 transition-all">
+    <div className="bg-pallete4a gap-1 border-pallete4a flex flex-row flex-nowrap border-4 rounded-full overflow-hidden w-fit md:min-w-fit">
+      <div className=" bg-pallete4c md:py-2 py-2 pl-3 pr-2 hover:scale-105 opacity-90 hover:opacity-100">
         <a href={link}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ export const ProjectLinks: React.FC<{ link: string; githubLink: string }> = ({
         </a>
       </div>
 
-      <div className="bg-pallete4c sm:py-2 py-2 pl-2 pr-3   hover:scale-105 transition-all">
+      <div className="bg-pallete4c sm:py-2 py-2 pl-2 pr-3 hover:scale-105 opacity-90 hover:opacity-100">
         <a href={githubLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

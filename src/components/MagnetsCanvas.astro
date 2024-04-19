@@ -10,7 +10,7 @@ export interface Props {}
 
 <script>
   import rough from "roughjs";
-  import { vec, vector } from "../../public/animation-resources/vetores";
+  import { vec, type vector } from "../../public/animation-resources/vetores";
   import createParticle from "../../public/animation-resources/particle";
   import magneticDipole from "../../public/animation-resources/magneticDipole";
   import type { Tparticle } from "../../public/animation-resources/types";
@@ -18,7 +18,7 @@ export interface Props {}
     easeWalkTruArray,
     traceGrid,
     traceVectorField,
-    TtraceGrid,
+    type TtraceGrid,
   } from "../../public/animation-resources/tracers";
   import { createGrid } from "../../public/animation-resources/gridCells";
 

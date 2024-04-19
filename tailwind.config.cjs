@@ -34,17 +34,17 @@ module.exports = {
         pallete4e: "#232e26",
       },
       keyframes: {
-        zinzout:{
-          '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.05)' },
-        }
+        zinzout: {
+          "0%, 100%": { transform: "scale(1)" },
+          "90%": { transform: "scale(1.05)" },
+        },
       },
       animation: {
-        zinzout: 'zinzout 800ms ease-in-out',
+        zinzout: "zinzout 3s ease-in",
       },
       backgroundImage: {
-        'texture': "url('https://i.ibb.co/FhfBXMD/static.jpg')",
-      }
+        texture: "url('https://i.ibb.co/FhfBXMD/static.jpg')",
+      },
     },
   },
   plugins: [],
