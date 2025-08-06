@@ -1,53 +1,65 @@
 import { SocialMediaNav } from "./SocialMediaNav";
-export type langData = {
-  [lang: string]: string[];
+
+type HeroContent = {
+  title: string;
+  subtitle: string;
+  text: string;
+  buttonText: string;
 };
 
-const text: langData = {
-  br: [
-    "Oi! Eu sou o Daniel e seja bem vinde a minha página! Eu ensino física e matemática, faço uns visuais e crio websites interessantes.",
-  ],
-  en: [
-    "Hi! I'm Daniel and welcome to my homepage! I teach physics and math, make some visuals and build interesting websites.",
-  ],
-};
-const buttons: langData = {
-  br: ["Vem dar uma olhada"],
-  en: ["Take a look"],
+type HeroProps = {
+  lang: string;
+  basePath: string;
 };
 
-export const Hero: React.FC<{ lang: string; basePath: string }> = ({
-  lang,
-  basePath,
-}) => {
+const content: Record<string, HeroContent> = {
+  br: {
+    title: "Daniel",
+    subtitle: "Desenvolvedor Fullstack",
+    text: "Oi! Gosto de criar coisas legais, interessantes, desafiadoras e bonitas, seja bem vinde. Aqui você vai encontrar alguns projetos que misturam tecnologia, educação e arte — e um pouco sobre mim.",
+    buttonText: "Vem dar uma olhada!",
+  },
+  en: {
+    title: "Daniel",
+    subtitle: "Fullstack developer",
+    text: "Hi! I like to create cool, interesting, challenging and beautifull stuff, be welcome. Here you'll find projects that blend tech, education and some art — and a little about me.",
+    buttonText: "Take a look!",
+  },
+};
+
+export const Hero: React.FC<HeroProps> = ({ lang, basePath }) => {
+  const currentContent = content[lang] || content.en;
+
   return (
     <>
-      <div className="w-full h-screen absolute flex flex-col justify-center z-10 overflow-hidden sm:grid sm:grid-cols-2">
-        <div className="flex flex-0 px-8 sm:self-center sm:-translate-y-[50%] sm:px-0 sm:pl-20">
-          <div className="select-none text-black text-opacity-100 mx-auto text-lg font-fira flex flex-row flex-wrap justify-center sm:justify-end mt-auto sm:h-fit sm:pr-2">
-            {text[lang][0].split(" ").map((word, index) => (
-              <div
-                className="border-none w-fit h-fit bg-white bg-opacity-100 px-1 my-1"
-                key={"word" + index}
+      <div className="absolute my-auto p-2 inset-0 sm:inset-[10%] lg:inset-x-[20%] flex flex-col items-center h-fit max-h-screen z-10 overflow-show sm:grid sm:grid-cols-2 sm:grid-rows-[auto] gap-4">
+        <div className="flex flex-col px-16 sm:self-center sm:pl-0 sm:pr-0 sm:col-span-2 sm:row-start-1 select-none text-white font-fira">
+          <span className="font-bold text-2xl">{currentContent.title}</span>
+          <span className="font-bold text-lg">{currentContent.subtitle}</span>
+          <span className="flex flex-wrap font-normal pt-4 text-justify">
+            {currentContent.text}
+          </span>
+          {/* {currentContent.text.split(" ").map((word, index) => (
+              <span
+                className="bg-black bg-opacity-[.05] px-1 my-1"
+                key={`word-${index}`}
               >
                 {word}
-              </div>
-            ))}
-          </div>
+              </span>
+            ))} */}
         </div>
-        <div className="flex flex-0 sm:self-center sm:translate-y-[50%] sm:pr-8">
-          <div className="flex flex-row flex-wrap mb-4 mt-12 gap-4 justify-center mx-auto select-none sm:h-fit sm:m-0 sm:p-0">
-            <a
-              className="rounded-sm font-fira sm:text-4xl text-lg select-none hover:select-none text-pallete4a hover:text-pallete4c  bg-pallete4c hover:bg-transparent hover:transition-all hover:outline-dashed hover:outline-2 hover:outline-pallete4c shadow-lg cursor-pointer px-8 py-8 sm:px-12 sm:py-12"
-              href={`${basePath}/${lang}/projects`}
-            >
-              {buttons[lang][0]}
-            </a>
-          </div>
+        <div className="flex sm:justify-end sm:col-span-2 sm:row-start-2 justify-center">
+          <a
+            className="flex flex-nowrap px-4 py-2 rounded-sm font-fira font-bold text-lg hover:select-none text-pallete4a hover:text-pallete4c bg-pallete4c hover:bg-transparent hover:transition-all hover:outline-dashed hover:outline-2 hover:outline-pallete4c shadow-lg cursor-pointer"
+            href={`${basePath}/${lang}/projects`}
+            aria-label={currentContent.buttonText}
+          >
+            {currentContent.buttonText}
+          </a>
         </div>
-      </div>
-      <div className="absolute w-full h-fit bottom-0 flex items-center justify-center p-8 z-10">
-        <SocialMediaNav />
+        <div className="sm:row-start-3 sm:col-span-2 w-1/2 flex place-self-center justify-center z-10 pt-4 border-t-2 border-pallete4c border-opacity-[.05] gap-4">
+          <SocialMediaNav />
+        </div>
       </div>
     </>
   );

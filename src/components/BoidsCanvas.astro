@@ -215,9 +215,9 @@ export interface Props {}
       let alphaDeviceSclFactor = gridFontSize > 12 ? 0.0003 : 0.002;
       let alpha = lerpStretchClamp(distFromEdges, 0, alphaDeviceSclFactor, 1, 0);
       
-      let customColorCalm = transformRGBtoRGBA("rgb(100,100,100)", alpha);
+      let customColorCalm = transformRGBtoRGBA(textColor, alpha);
       let customColorDrag = transformRGBtoRGBA(heroColor, alpha);
-      let customColorAccent = transformRGBtoRGBA(textColor, alpha);
+      let customColorAccent = transformRGBtoRGBA("rgb(100,100,100)", alpha);
 
       rc.polygon(
         [

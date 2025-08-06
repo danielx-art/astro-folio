@@ -18,7 +18,8 @@ subPaths.splice(0, 1);
 
 let basePath = Astro.url.origin + "/astro-folio";
 let homePath = lang == "br" ? basePath + "/br/" : basePath + "/en/";
-const areWeHome = pathname == homePath || pathname == basePath || pathname == basePath +"/";
+const areWeHome =
+  pathname == homePath || pathname == basePath || pathname == basePath + "/";
 //console.log("Debugg:\n homePath: "+homePath+"\n"+" pathname: "+pathname+"\n"+" basePath with slash: "+basePath+"/"+"\n areWeHome: "+areWeHome); //debugg
 
 let changeLangPath = lang == "br" ? basePath + "/en/" : basePath + "/br/";
@@ -27,21 +28,24 @@ for (let i = 2; i < subPaths.length; i++) {
   changeLangPath += subPaths[i] + "/";
 }
 
-import {ViewTransitions} from 'astro:transitions';
+import { ViewTransitions } from "astro:transitions";
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
+    <!-- <link
       href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600&display=swap"
       rel="stylesheet"
-    />
+    /> -->
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <ViewTransitions />
@@ -77,6 +81,14 @@ import {ViewTransitions} from 'astro:transitions';
     <slot />
 
     <style is:global>
+      @font-face {
+        font-family: "Fira Code";
+        src: url("/fonts/FiraCode-VariableFont_wght.woff2")
+          format("woff2-variations");
+        font-weight: 300 700; /* Supported weight range */
+        font-display: swap;
+      }
+
       * {
         overscroll-behavior: contain;
       }
@@ -98,7 +110,9 @@ import {ViewTransitions} from 'astro:transitions';
         width: fit-content;
         display: flex;
         gap: 0.5rem;
-        font-family: Fira Code, monospace;
+        font-family:
+          Fira Code,
+          monospace;
         cursor: pointer;
         user-select: none;
         z-index: 999;
@@ -167,8 +181,15 @@ import {ViewTransitions} from 'astro:transitions';
       }
 
       code {
-        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+        font-family:
+          Menlo,
+          Monaco,
+          Lucida Console,
+          Liberation Mono,
+          DejaVu Sans Mono,
+          Bitstream Vera Sans Mono,
+          Courier New,
+          monospace;
       }
     </style>
   </body>

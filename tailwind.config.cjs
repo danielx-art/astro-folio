@@ -3,7 +3,7 @@ module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     fontFamily: {
-      fira: ["ui-monospace", "Fira Code"],
+      fira: ["Fira Code", "ui-monospace", "monospace"],
     },
     extend: {
       colors: {
