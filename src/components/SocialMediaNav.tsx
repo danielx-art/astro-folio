@@ -41,7 +41,7 @@ const GitHubIcon = () => (
 
 const LinkedInIcon = () => (
   <Tooltip text="LinkedIn">
-    <SocialMediaIcon link="">
+    <SocialMediaIcon link="https://linkedin.com/in/daniel-rangel-guedes">
       <svg
         height="32"
         width="32"
