@@ -18,7 +18,7 @@ type SocialMediaIconProps = {
 const SocialMediaIcon = ({ link, children }: SocialMediaIconProps) => {
   return (
     <div className="">
-      <a href={link}>{children}</a>
+      <a href={link} target="new">{children}</a>
     </div>
   );
 };
