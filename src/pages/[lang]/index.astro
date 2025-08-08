@@ -17,7 +17,7 @@ const basePath = Astro.url.origin + "/astro-folio";
 <Layout title="Daniel Folio" lang={lang}>
   <div class="w-full h-full">
     <Hero lang={lang} basePath={basePath} />
-    <!-- <BoidsCanvas client:load /> -->
+    <BoidsCanvas client:load />
     <div class="background-vfx"></div>
   </div>
   <style>
