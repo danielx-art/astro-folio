@@ -4,7 +4,6 @@ export const ThemeToggle = () => {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-
     if (savedTheme) {
       setTheme(savedTheme);
       document.body.classList.add(savedTheme);
@@ -20,7 +19,6 @@ export const ThemeToggle = () => {
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
-
     document.body.classList.remove("light", "dark");
     document.body.classList.add(newTheme);
     localStorage.setItem("theme", newTheme);
@@ -30,14 +28,15 @@ export const ThemeToggle = () => {
     <button
       id="theme-toggle"
       aria-label="Toggle theme"
-      onClick={toggleTheme}
-      className="fixed top-2 left-2 z-[1000] 
-                 bg-neutral border border-border 
+      onClick={(toggleTheme)}
+      className="relative
+                 bg-transparent
                  rounded-md p-2 cursor-pointer 
                  transition-all duration-300 
-                 backdrop-blur-sm w-10 h-10 
+                 backdrop-blur-sm w-8 h-8 
                  flex items-center justify-center 
-                 hover:bg-primary hover:text-white"
+                 text-text/60
+                 hover:text-text/100"
     >
       {/* Light */}
       <svg

@@ -9,7 +9,7 @@ const basePath = Astro.url.origin + "/astro-folio";
 <Layout title="Daniel Folio" lang={lang}>
   <div class="w-full h-full">
     <Hero lang={lang} basePath={basePath} />
-    <BoidsCanvas />
+    <BoidsCanvas client:load />
     <div class="background-vfx"></div>
   </div>
   <style>
@@ -21,10 +21,10 @@ const basePath = Astro.url.origin + "/astro-folio";
       bottom: 0;
       height: 100dvh;
       min-height: 100%;
-      opacity: 0.3;
+      opacity: 0.2;
       background-blend-mode: lighten;
       user-select:none;
-      background-image: linear-gradient(to top left, #c72e31, rgb(199 46 49 / 0));
+      background-image: linear-gradient(to top left, rgb(var(--bg-vfx)), rgb(199 46 49 / 0));
       background-attachment: fixed;
       z-index:-1;
       user-select:none;
@@ -43,7 +43,7 @@ const basePath = Astro.url.origin + "/astro-folio";
       background: url("https://i.ibb.co/FhfBXMD/static.jpg") repeat center;
       background-attachment: fixed;
       mix-blend-mode: overlay;
-      opacity: 0.3;
+      opacity: 0.2;
       z-index: -1;
       user-select: none;
     }

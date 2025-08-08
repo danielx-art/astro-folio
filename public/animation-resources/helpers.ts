@@ -35,11 +35,13 @@ export function lerpStretchClamp(
 export function transformRGBtoRGBA(rgbString: string, alpha: number): string {
   const rgbValues = rgbString.match(/\d+/g);
 
-  if (rgbValues && rgbValues.length === 3) {
+  if (rgbValues && rgbValues.length >= 3) {
     // Convert the alpha value to a valid range (0 to 1)
     alpha = Math.min(1, Math.max(0, alpha));
 
-    return `rgba(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]}, ${alpha})`;
+    //if(rgbValues[3]) console.log(rgbValues[3]); //debugg
+
+    return `rgba(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]}, ${rgbValues.length === 4 ? parseInt(rgbValues[3])*alpha*0.01 : alpha})`;
   } else {
     return "rgba(0,0,0,1)";
   }

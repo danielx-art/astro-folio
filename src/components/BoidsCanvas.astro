@@ -35,9 +35,9 @@ export interface Props {}
   let isOnbutton = false;
   const bodyStyles = getComputedStyle(document.body);
   const colors = {
-    calm: bodyStyles.getPropertyValue("--text").trim(),
-    drag: bodyStyles.getPropertyValue("--accent").trim(),
-    accent: bodyStyles.getPropertyValue("--primary").trim(),
+    calm: bodyStyles.getPropertyValue("--boids-calm").trim(),
+    hover: bodyStyles.getPropertyValue("--boids-excited").trim(),
+    drag: bodyStyles.getPropertyValue("--boids-agressive").trim(),
   }
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize: number;
@@ -218,9 +218,9 @@ export interface Props {}
       let alphaDeviceSclFactor = gridFontSize > 12 ? 0.0003 : 0.002;
       let alpha = lerpStretchClamp(distFromEdges, 0, alphaDeviceSclFactor, 1, 0);
       
-      let customColorCalm = transformRGBtoRGBA(colors.calm, alpha*0.1);
+      let customColorCalm = transformRGBtoRGBA(colors.calm, alpha);
+      let customColorAccent = transformRGBtoRGBA(colors.hover, alpha);
       let customColorDrag = transformRGBtoRGBA(colors.drag, alpha);
-      let customColorAccent = transformRGBtoRGBA(colors.accent, alpha);
 
       rc.polygon(
         [
