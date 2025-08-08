@@ -20,29 +20,40 @@ const basePath = Astro.url.origin + "/astro-folio";
     <BoidsCanvas />
     <div class="background-vfx"></div>
   </div>
+  <script>
+    import { initBoids } from "../../scripts/boids";
+
+    document.addEventListener("astro:page-load", () => {
+      initBoids();
+    });
+  </script>
   <style>
     .background-vfx {
       position: fixed;
       top: 0;
-      right:0;
+      right: 0;
       left: 0;
       bottom: 0;
       height: 100dvh;
       min-height: 100%;
       opacity: 0.2;
       background-blend-mode: lighten;
-      user-select:none;
-      background-image: linear-gradient(to top left, rgb(var(--bg-vfx)), rgb(199 46 49 / 0));
+      user-select: none;
+      background-image: linear-gradient(
+        to top left,
+        rgb(var(--bg-vfx)),
+        rgb(199 46 49 / 0)
+      );
       background-attachment: fixed;
-      z-index:-1;
-      user-select:none;
+      z-index: -1;
+      user-select: none;
     }
-    
+
     .background-vfx::after {
-      content: '';
+      content: "";
       position: fixed;
       top: 0;
-      right:0;
+      right: 0;
       left: 0;
       bottom: 0;
       height: 100dvh;
