@@ -33,8 +33,12 @@ export interface Props {}
   ----------------------------------------------------------*/
   let isDragging = false;
   let isOnbutton = false;
-  const textColor = getComputedStyle(canvasContainer).color;
-  const heroColor = getComputedStyle(herocanvas).color;
+  const bodyStyles = getComputedStyle(document.body);
+  const colors = {
+    calm: bodyStyles.getPropertyValue("--text").trim(),
+    drag: bodyStyles.getPropertyValue("--accent").trim(),
+    accent: bodyStyles.getPropertyValue("--primary").trim(),
+  }
   var ctx = herocanvas.getContext("2d") as CanvasRenderingContext2D;
   let gridFontSize: number;
   const num = 30;
@@ -215,9 +219,9 @@ export interface Props {}
       let alphaDeviceSclFactor = gridFontSize > 12 ? 0.0003 : 0.002;
       let alpha = lerpStretchClamp(distFromEdges, 0, alphaDeviceSclFactor, 1, 0);
       
-      let customColorCalm = transformRGBtoRGBA(textColor, alpha);
-      let customColorDrag = transformRGBtoRGBA(heroColor, alpha);
-      let customColorAccent = transformRGBtoRGBA("rgb(100,100,100)", alpha);
+      let customColorCalm = transformRGBtoRGBA(colors.calm, alpha*0.1);
+      let customColorDrag = transformRGBtoRGBA(colors.drag, alpha);
+      let customColorAccent = transformRGBtoRGBA(colors.accent, alpha);
 
       rc.polygon(
         [
@@ -232,7 +236,7 @@ export interface Props {}
             : isOnbutton
             ? customColorAccent
             : customColorCalm,
-          fill: isDragging ? transformRGBtoRGBA(heroColor, alpha) : "none",
+          fill: isDragging ? customColorDrag : "transparent",
           fillStyle: "solid",
         }
       );

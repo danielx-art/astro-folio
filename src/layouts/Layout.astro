@@ -50,7 +50,7 @@ import { ViewTransitions } from "astro:transitions";
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body>
+  <body class="dark">
     <nav class="nav_menu">
       {
         !areWeHome && (
@@ -133,31 +133,31 @@ import { ViewTransitions } from "astro:transitions";
       }
 
       :root {
-        --pallete1a: #283d3b;
-        --pallete1aA: #283d3b10;
-        --pallete1b: #197278;
-        --pallete1bA: #19727840;
-        --pallete1c: #eddd49;
-        --pallete1d: #c44536;
-        --pallete1e: #772e25;
-        --pallete2a: #ba1200;
-        --pallete2b: #031927;
-        --pallete2c: #9dd1f1;
-        --pallete2d: #508aa8;
-        --pallete2e: #c8e0f4;
-        --pallete3a: #09484a;
-        --pallete3aA: #09484a90;
-        --pallete3b: #301026;
-        --pallete3c: #04bcc2;
-        --pallete3d: #c2a817;
-        --pallete3e: #4f4408;
-        --pallete4a: #080a1f;
-        --pallete4aA: #080a1f60;
-        --pallete4b: #c72e31;
-        --pallete4c: #4551c4;
-        --pallete4cA: #4551c440;
-        --pallete4d: #c4a431;
-        --pallete4e: #232e26;
+        --pallete4aA: #080a1f60; /* deeppurple */
+        --pallete4b: #c72e31; /* coolred */
+        --pallete4c: #4551c4; /* purpleblue */
+        --pallete4cA: #4551c440; /* purplebluealpha */
+        --pallete4d: #c4a431; /* mustard */
+        --pallete4e: #E6E8F0; /* softwhite */
+        --pallete4f: #232e26; /* boardgreen */
+      }
+
+      .light {
+        --background: 247 248 250;
+        --accent: 176 32 35; 
+        --primary: 58 70 168; 
+        --secondary: 166 133 31; 
+        --text: 26 28 43;
+        --neutral: 62 91 74;
+      }
+
+      .dark {
+        --background: 8 10 31;
+        --accent: 199 46 49;
+        --primary: 69 81 196;
+        --secondary: 196 164 49;
+        --text: 230 232 240;
+        --neutral: 35 46 38;
       }
 
       html {
@@ -179,7 +179,7 @@ import { ViewTransitions } from "astro:transitions";
         min-height: 100%;
         height: fit-content;
         overflow-y: auto;
-        background-color: var(--pallete4a);
+        background-color: rgb(var(--background));
       }
 
       code {
