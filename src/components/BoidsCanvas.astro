@@ -2,9 +2,22 @@
 export interface Props {}
 ---
 
-<div id="canvas-container" class="absolute -z-10 top-0 left-0 m-0 p-0 box-border overflow-hidden inline-block sm:text-lg text-xs w-full h-full">
+<div
+  id="canvas-container"
+  class="absolute -z-10 top-0 left-0 m-0 p-0 box-border overflow-hidden inline-block sm:text-lg text-xs w-full h-full"
+>
   <canvas id="hero-canvas"> </canvas>
 </div>
+<script>
+  import { initBoids } from "../scripts/boids";
+  document.addEventListener("astro:page-load", () => {
+    //checks the path to be one of the index paths, otherwise it runs on every page due to view transitions, even thought the script is not on every page
+    const path = window.location.pathname;
+    if (/(astro-folio(\/(br|en))?\/?)$/.test(path)) {
+      initBoids();
+    }
+  });
+</script>
 <style>
   @media (max-width: 1024px) {
     #canvas-container {

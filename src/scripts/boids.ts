@@ -127,7 +127,7 @@ export function initBoids() {
     h = canvasContainer.clientHeight;
     herocanvas.width = w;
     herocanvas.height = h;
-    gridFontSize = parseInt(getComputedStyle(canvasContainer).fontSize, 10);
+    gridFontSize = parseInt(getComputedStyle(canvasContainer).fontSize, 10) || 10;
 
     //1.Initialize particles
 

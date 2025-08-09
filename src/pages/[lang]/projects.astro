@@ -4,7 +4,6 @@ import { ProjectLinks } from "../../components/ProjectLinks";
 import { ProjectTechs } from "../../components/ProjectTechs";
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
-import BoidsCanvas from "../../components/BoidsCanvas.astro";
 
 export function getStaticPaths() {
   return [{ params: { lang: "br" } }, { params: { lang: "en" } }];
